@@ -38,30 +38,37 @@ module myip(
     input                          ARESETN; // System reset, active low
     // slave in interface
     output                         S_AXIS_TREADY;  // Ready to accept data in
-    input      [31 : 0]            S_AXIS_TDATA;   // Data in
+    input      [15 : 0]            S_AXIS_TDATA;   // Data in
     input                          S_AXIS_TLAST;   // Optional data in qualifier
     input                          S_AXIS_TVALID;  // Data in is valid
     // master out interface
     output                         M_AXIS_TVALID;  // Data out is valid
-    output     [31 : 0]            M_AXIS_TDATA;   // Data Out
+    // output     [31 : 0]            M_AXIS_TDATA;   // Data Out
+    output     [15 : 0]            M_AXIS_TDATA;   // Data Out
     output                         M_AXIS_TLAST;   // Optional data out qualifier
     input                          M_AXIS_TREADY;  // Connected slave device is ready to accept data out
 
     /******************** Actual Code ***************************/
     
     // RAM parameters
-    localparam Number_of_dataset = 64; localparam Dataset_depth_counter_bits = 6;
-    localparam Number_of_bits = 8;
-    localparam Number_of_features = 8; // the first one is always 1 as it corresponds to bias in the weights
-    localparam Feature_counter_bits = 3;
+    localparam Number_of_dataset = 512; // Number of datasets that we have
+    localparam Dataset_depth_counter_bits = 9; // 2 ** this number >= Number of dataset
+    localparam Number_of_bits = 16; // Number of bits per data
+    
+    localparam Number_of_features = 6; // Number of weights + bias per filter (bias is also bit_0)
+    localparam Feature_counter_bits = 3; // 2 ** this number >= Number of features
+
+    localparam Number_of_filters = 8; // Number of filters that we have for the weights
+    localparam Filter_counter_bits = 3; // 2 ** this number >= Number_of_filters 
+
     localparam Data_depth_bits = 9; // Used for counters --> 9 because we have 512 data points and 2**9 = 512
     localparam weights_depth_bits = 5; // used for counters --> 5 becuase we have 19 data points and 2 ** 5 = 32 which is > 19
     localparam Number_of_weights_depth = 3;
 
     // Overall IO parameters
-    localparam Total_number_of_input_words = 467; // need adjustment whenever neceessary
-    localparam Total_number_of_weights = 19;
-    localparam Total_number_of_output_words = 64;
+    localparam Total_number_of_input_words = 560; // need adjustment whenever neceessary
+    localparam Total_number_of_weights = 48;
+    localparam Total_number_of_output_words = 4096;
 
     // Define the states of state machine (one hot encoding)
     localparam Idle  = 4'b1000;
@@ -74,16 +81,16 @@ module myip(
 
     // Counter to store the number of inputs read & outputs written
     reg [Data_depth_bits + 1:0] nr_of_reads;  
-    reg [Dataset_depth_counter_bits:0] nr_of_writes;
+    reg [12:0] nr_of_writes;
 
     /******************* Wire Declaration ***********************/
     // Data RAM Related
     reg Data_write_en;
     wire Data_read_en;
-    reg [Number_of_bits - 1 : 0] Data_write_data_in;
-    reg [Dataset_depth_counter_bits - 1 : 0] Data_write_address_depth; 
-    // reg [Feature_counter_bits - 1 : 0] Data_write_address_width; 
     wire [Dataset_depth_counter_bits - 1 : 0] Data_read_address_depth; 
+    reg [Dataset_depth_counter_bits - 1 : 0] Data_write_address_depth; 
+    reg [Number_of_bits - 1 : 0] Data_write_data_in;
+
     wire [Number_of_bits - 1 : 0] Data_read_out_0;
     wire [Number_of_bits - 1 : 0] Data_read_out_1;
     wire [Number_of_bits - 1 : 0] Data_read_out_2;
@@ -93,10 +100,11 @@ module myip(
     // Weight RAM Related
     reg Weight_write_en;
     wire Weight_read_en;
-    reg [Number_of_bits - 1 : 0] Weight_write_data_in;
-    reg [Feature_counter_bits - 1 : 0] Weight_write_address_depth; 
-    reg [Feature_counter_bits - 1 : 0] Weight_write_address_width; 
     wire [Feature_counter_bits - 1 : 0] Weight_read_address_depth; 
+    reg [Feature_counter_bits - 1 : 0] Weight_write_address_depth;
+    reg [Feature_counter_bits - 1 : 0] Weight_write_address_width; 
+    reg [Number_of_bits - 1 : 0] Weight_write_data_in;
+    
     wire [Number_of_bits - 1 : 0] Weight_read_out_0;
     wire [Number_of_bits - 1 : 0] Weight_read_out_1;
     wire [Number_of_bits - 1 : 0] Weight_read_out_2;
@@ -106,20 +114,14 @@ module myip(
 
     // Result RAM Related
     wire RES_write_en;
-    wire RES_read_en;
+    reg RES_read_en; 
+    reg [Filter_counter_bits - 1 : 0] RES_read_address_depth; // need mux if we want to read in the Compute Processor module
+    reg [Dataset_depth_counter_bits - 1 : 0] RES_read_address_width; 
+    wire [Filter_counter_bits - 1 : 0] RES_write_address_depth;
+    wire [Dataset_depth_counter_bits - 1 : 0] RES_write_address_width; 
     wire [Number_of_bits - 1 : 0] RES_write_data_in;
-    wire [Dataset_depth_counter_bits - 1 : 0] RES_write_address_depth;
-    wire [Feature_counter_bits - 1 : 0] RES_write_address_width; 
-    wire [Dataset_depth_counter_bits - 1 : 0] RES_read_address_depth; // need mux
-    wire [Feature_counter_bits - 1 : 0] RES_read_address_width; 
-    wire [Number_of_bits - 1 : 0] RES_data_out;
-    // wire [Number_of_bits - 1 : 0] RES_data_out_1;
-    // wire [Number_of_bits - 1 : 0] RES_data_out_2;
-    // wire [Number_of_bits - 1 : 0] RES_data_out_3;
-    // wire [Number_of_bits - 1 : 0] RES_data_out_4;
-    // wire [Number_of_bits - 1 : 0] RES_data_out_5;
-    // wire [Number_of_bits - 1 : 0] RES_data_out_6;
-    // wire [Number_of_bits - 1 : 0] RES_data_out_7;
+
+    wire [Number_of_bits - 1 : 0] RES_data_out_0;
 
     // Compute Process Related
     reg Compute_enable;
@@ -127,18 +129,8 @@ module myip(
 
     /*********************** Wire Declaration End ******************/
 
-    /**************** State Machine Related Declaration ****************/ 
-    reg RES_read_en_main_module;
-    reg [Dataset_depth_counter_bits - 1 : 0] RES_read_address_depth_main_module;
-    wire [Dataset_depth_counter_bits - 1 : 0] RES_read_address_depth_compute;
-    wire RES_read_en_compute;
-
-    /************************** Mux Declaration ************************/
-    assign RES_read_address_depth = (state == Compute) ? RES_read_address_depth_compute : RES_read_address_depth_main_module;
-    assign RES_read_en = (state == Compute) ? RES_read_en_compute : RES_read_en_main_module;
-
     /*********************** General Assignment Declaration ************/
-    assign M_AXIS_TDATA = (RES_data_out_3 > 128) ? 1 : 0; // 2~3 results are hidden layer results
+    assign M_AXIS_TDATA = RES_data_out_0;
 
     assign S_AXIS_TREADY = (state == Read_Inputs);
     assign M_AXIS_TVALID = (state == Write_Outputs);
@@ -153,8 +145,10 @@ module myip(
             state <= Idle;
             nr_of_reads <= 0;
             nr_of_writes <= 0;
-            RES_read_en_main_module <= 0;
-            RES_read_address_depth_main_module <= 0;
+            RES_read_en <= 0;
+            RES_read_address_depth <= 0;
+            RES_read_address_width <= 0;
+
             Compute_enable <= 0;
         end else begin
             /*************** Actual State Machine *************/
@@ -162,21 +156,34 @@ module myip(
                 Idle:
                     begin
                         if (S_AXIS_TVALID == 1) begin // if input data is valid
+
                             state <= Read_Inputs;
                             nr_of_reads <= Total_number_of_input_words - 1;
+
+                        end else begin
+                             /************** General Reset ************/
+                            // IO counter related
+                            nr_of_writes <= 0;
+                            nr_of_reads <= 0;
                         end
 
-                        // General Reset
-                        nr_of_writes <= 0;
-                        RES_read_en_main_module <= 0;
-                        Compute_enable <= 0;
-                        // Data_write_address_width <= 0;
+                        /************** General Reset *************/
+                        // RES_RAM related
+                        RES_read_en <= 0;
+                        RES_read_address_depth <= 0;
+                        RES_read_address_width <= 0;
+
+                        // Data_RAM related
                         Data_write_address_depth <= 0;
+                        Data_write_en <= 0;
+
+                        // Weights_RAM related
                         Weight_write_address_width <= 0;
                         Weight_write_address_depth <= 0;
-                        RES_read_address_depth_main_module <= 0;
-                        Data_write_en <= 0;
                         Weight_write_en <= 0;
+
+                        // Others
+                        Compute_enable <= 0;
                     end     
 
                 Read_Inputs:
@@ -191,10 +198,10 @@ module myip(
 
                             if (nr_of_reads >= Total_number_of_weights) begin // if we are reading data
                                 Data_write_en <= 1;
-                                Data_write_data_in <= S_AXIS_TDATA:
+                                Data_write_data_in <= S_AXIS_TDATA;
 
                                 // Address increment for data
-                                Data_address_depth <= Data_address_depth + Data_write_en;
+                                Data_write_address_depth <= Data_write_address_depth + Data_write_en;
                             end else begin
                                 Data_write_en <= 0;
                             end
@@ -210,7 +217,7 @@ module myip(
                                     Weight_write_address_width <= 0;
                                 end
 
-                                if (Weight_write_address_width == 6) begin
+                                if (Weight_write_address_width == 5) begin
                                     Weight_write_address_depth <= Weight_write_address_depth + Weight_write_en;
                                 end
                             end
@@ -228,7 +235,7 @@ module myip(
                             state <= Write_Outputs;
 
                             // Enable reading output
-                            RES_read_en_main_module <= 1;
+                            RES_read_en <= 1;
                         end else begin
                             // Enable Compute
                             Compute_enable <= 1;
@@ -240,14 +247,14 @@ module myip(
                             nr_of_writes <= nr_of_writes - 1;
 
                             // Address increment
-                            if (RES_read_address_width_main_module < 5) begin
-                                RES_read_address_width_main_module <= RES_read_address_width_main_module + 1;
+                            if (RES_read_address_width < 511) begin
+                                RES_read_address_width <= RES_read_address_width + 1;
                             end else begin
-                                RES_read_address_width_main_module <= 0;
+                                RES_read_address_width <= 0;
                             end
 
-                            if (RES_read_address_width_main_module == 6) begin
-                                RES_read_address_depth_main_module <= RES_read_address_depth_main_module + 1;
+                            if (RES_read_address_width == 511) begin
+                                RES_read_address_depth <= RES_read_address_depth + 1;
                             end
                         end
                     end
@@ -257,27 +264,116 @@ module myip(
     end
 
     /************** Module instantiation *******************/
-    Memory_RAM #(.Bit_width(Number_of_bits), 
-        .Nr_depth(Number_of_dataset), 
-        .Depth_counter_bits(Dataset_depth_counter_bits),
-        .Nr_feature(Number_of_features),
-        .Feature_counter_bits(Feature_counter_bits)) Data_RAM (
+    // Shape : Number of Dataset x 16 bits
+    Data_RAM #(
+            .Bit_width(Number_of_bits), 
+            .Nr_depth(Number_of_dataset), 
+            .Depth_counter_bits(Dataset_depth_counter_bits)
+    ) Data_RAM (
+            // Input
             .Clk(ACLK),
             .Write_en(Data_write_en),
             .Read_en(Data_read_en),
-            .Write_data_in(Data_write_data_in),
-            .Address_depth_write(Data_write_address_depth),
-            .Address_feature_write(Data_write_address_width + 2'b1), // we do not index the first addresss
             .Address_depth_read(Data_read_address_depth),
-            // .Address_feature_read(Data_read_address_width),
+            .Address_depth_write(Data_write_address_depth),
+            .Write_data_in(Data_write_data_in),
+
+            // Output
             .Read_data_out_0(Data_read_out_0),
             .Read_data_out_1(Data_read_out_1),
             .Read_data_out_2(Data_read_out_2),
             .Read_data_out_3(Data_read_out_3),
-            .Read_data_out_4(Data_read_out_4),
-            .Read_data_out_5(Data_read_out_5),
-            .Read_data_out_6(Data_read_out_6),
-            .Read_data_out_7(Data_read_out_7)
+            .Read_data_out_4(Data_read_out_4)
         );
+    
+    // Shape : Number of filter x Number of Weights + bias x 16 bitss
+    Weight_RAM #(
+        .Bit_width(Number_of_bits),
+        .Nr_depth(Number_of_filters),
+        .Depth_counter_bits(Filter_counter_bits),
+        .Nr_feature(Number_of_features),
+        .Feature_counter_bits(Feature_counter_bits)
+    ) Weight_RAM (
+        // Input 
+        .Clk(ACLK),
+        .Write_en(Weight_write_en),
+        .Read_en(Weight_read_en),
+        .Address_depth_read(Weight_read_address_depth),
+        .Address_depth_write(Weight_write_address_depth),
+        .Address_width_write(Weight_write_address_width),
+        .Write_data_in(Weight_write_data_in),
+
+        // Output
+        .Read_data_out_0(Weight_read_out_0),
+        .Read_data_out_1(Weight_read_out_1),
+        .Read_data_out_2(Weight_read_out_2),
+        .Read_data_out_3(Weight_read_out_3),
+        .Read_data_out_4(Weight_read_out_4),
+        .Read_data_out_5(Weight_read_out_5)
+    );
+
+    // Shape : Number of filter x Number of Dataset x 16 bits
+    RES_RAM #(
+        .Bit_width(Number_of_bits),
+        .Nr_depth(Number_of_filters),
+        .Depth_counter_bits(Filter_counter_bits),
+        .data_set_count(Number_of_dataset),
+        .Feature_counter_bits(Dataset_depth_counter_bits)
+    ) RES_RAM (
+        // Input
+        .Clk(ACLK),
+        .Write_en(RES_write_en),
+        .Read_en(RES_read_en),
+        .Address_depth_read(RES_read_address_depth),
+        .Address_width_read(RES_read_address_width),
+        .Address_depth_write(RES_write_address_depth),
+        .Address_width_write(RES_write_address_width),
+        .Write_data_in(RES_write_data_in),
+
+        // Output
+        .Read_data_out_0(RES_data_out_0)
+    );
+
+    Compute_Processor #(
+        .Bit_width(Number_of_bits), 
+        .Dataset_depth_counter_bits(Dataset_depth_counter_bits), 
+        .Filter_counter_bits(Filter_counter_bits)
+    ) Compute_Processor (
+        // Input
+        .Clk(ACLK),
+        .Enable(Compute_enable),
+        
+        // Data
+        .Data_read_out_0(Data_read_out_0),
+        .Data_read_out_1(Data_read_out_1),
+        .Data_read_out_2(Data_read_out_2),
+        .Data_read_out_3(Data_read_out_3),
+        .Data_read_out_4(Data_read_out_4),
+
+        // Weights
+        .Weight_read_out_0(Weight_read_out_0),
+        .Weight_read_out_1(Weight_read_out_1),
+        .Weight_read_out_2(Weight_read_out_2),
+        .Weight_read_out_3(Weight_read_out_3),
+        .Weight_read_out_4(Weight_read_out_4),
+        .Weight_read_out_5(Weight_read_out_5),
+
+        // Address & RAM Enable for Data
+        .Data_RAM_address(Data_read_address_depth),
+        .Data_RAM_Read_Enable_Reg(Data_read_en),
+
+        // Address & RAM Enable for Weights
+        .Weights_RAM_address_depth(Weight_read_address_depth),
+        .Weights_RAM_Read_Enable_Reg(Weight_read_en),
+
+        // Address & RAM Enable for Result
+        .Result_RAM_write_address_depth(RES_write_address_depth),
+        .Result_RAM_write_address_width(RES_write_address_width),
+        .Result_RAM_write_M(RES_write_en),
+        .Result_RAM_write_data(RES_write_data_in),
+
+        // Others
+        .Done_M(Compute_Done)
+    );
 
 endmodule

@@ -26,19 +26,20 @@ module Adder
 
     )(
         input Enable,
-        input [2*Bit_width-1:0] Mul_result_0,
-        input [2*Bit_width-1:0] Mul_result_1,
-        input [2*Bit_width-1:0] Mul_result_2,
-        input [2*Bit_width-1:0] Mul_result_3,
-        input [2*Bit_width-1:0] Mul_result_4,
+        input signed [2*Bit_width-1:0] Mul_result_0,
+        input signed [2*Bit_width-1:0] Mul_result_1,
+        input signed [2*Bit_width-1:0] Mul_result_2,
+        input signed [2*Bit_width-1:0] Mul_result_3,
+        input signed [2*Bit_width-1:0] Mul_result_4,
+        input signed [2*Bit_width-1:0] Mul_result_5,
         output reg [Bit_width-1:0] Digital_sum
     );
 
     reg [2*Bit_width-1:0] Sum;
     always @ (*) begin
         if (Enable) begin
-            Sum = Mul_result_0 + Mul_result_1 + Mul_result_2 + Mul_result_3 + Mul_result_4;
-            Digital_sum = Sum[2*Bit_width-1:Bit_width];
+            Sum = Mul_result_0 + Mul_result_1 + Mul_result_2 + Mul_result_3 + Mul_result_4 + Mul_result_5;
+            Digital_sum = Sum [23 : 8];
         end else begin
             Digital_sum = 0;
             Sum = 0;

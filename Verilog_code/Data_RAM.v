@@ -28,12 +28,15 @@ module Data_RAM
     )
 
     (
+        // Input 
         input Clk,
         input Write_en,
         input Read_en,
         input [Depth_counter_bits - 1 : 0] Address_depth_read,
         input [Depth_counter_bits - 1 : 0] Address_depth_write,
         input [Bit_width - 1 : 0] Write_data_in,
+
+        // Output
         output reg [Bit_width - 1 : 0] Read_data_out_0,
         output reg [Bit_width - 1 : 0] Read_data_out_1,
         output reg [Bit_width - 1 : 0] Read_data_out_2,
@@ -51,11 +54,11 @@ module Data_RAM
         end
 
         if (Read_en) begin
-            Read_data_out_0 <= (Address_depth_read - 2 < 0) ? 0 : RAM[Address_depth_read - 2];
-            Read_data_out_1 <= (Address_depth_read - 1 < 0) ? 0 : RAM[Address_depth_read - 1];
+            Read_data_out_0 <= (Address_depth_read < 2) ? 0 : RAM[Address_depth_read - 2];
+            Read_data_out_1 <= (Address_depth_read < 1) ? 0 : RAM[Address_depth_read - 1];
             Read_data_out_2 <= RAM[Address_depth_read];
-            Read_data_out_3 <= (Address_depth_read + 1 >= 512) ? 0 : RAM[Address_depth_read + 1];
-            Read_data_out_4 <= (Address_depth_read + 2 >= 512) ? 0 : RAM[Address_depth_read + 2];
+            Read_data_out_3 <= (Address_depth_read == 511) ? 0 : RAM[Address_depth_read + 1];
+            Read_data_out_4 <= (Address_depth_read >= 510) ? 0 : RAM[Address_depth_read + 2];
         end
     end
 endmodule
