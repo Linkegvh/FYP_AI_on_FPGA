@@ -29,13 +29,14 @@ module UART_TB(
 
     // RAM declaration
     localparam width = 8;
-    localparam Num_input_words = 31;
+    localparam Num_input_words = 5;
     localparam Num_output_words = 32;
-    reg [width - 1 : 0] input_mem [0 : Num_input_words - 1];
+    reg [width - 1 : 0] input_mem [0 : 50];
     reg [width - 1 : 0] output_mem [0 : Num_output_words - 1];
 
     // Memory Counter related
     integer word_cnt, packet_bit_counter;
+    integer bit_ptr;
 
     // IO related
     wire uart_data_in;
@@ -66,18 +67,20 @@ module UART_TB(
                 // send start bit
                 uart_data_out = 0;
 
-                // Wait for one cycle
+                // wait for one cycle
                 #104166;
-                
-                // iterative send data bit by bit
+
+                // iteratively send data bit by bit
                 while (packet_bit_counter < 8) begin
                     uart_data_out = input_mem[word_cnt][packet_bit_counter];
                     packet_bit_counter = packet_bit_counter + 1;
                     #104166;
                 end
 
+                // send stop bit
                 uart_data_out = 1;
                 #104166;
+
                 word_cnt = word_cnt + 1;
             end
 

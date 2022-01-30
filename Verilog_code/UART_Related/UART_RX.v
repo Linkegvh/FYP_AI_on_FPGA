@@ -43,7 +43,7 @@ module UART_RX(
     reg r_Rx_DV = 0;
     reg [2:0] r_SM_Main = 0;
     
-    assign o_Rx_DV = r_Rx_DV;
+    assign o_Rx_DV = (r_Rx_Byte) ? r_Rx_DV : 0; // only send out value bit
     assign o_Rx_Byte = r_Rx_Byte;
     
     // purpose: Double-register the incoming data

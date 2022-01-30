@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-| Date         : Sat Jan 29 16:12:16 2022
+| Date         : Sun Jan 30 20:52:25 2022
 | Host         : DESKTOP-864GRHJ running 64-bit major release  (build 9200)
 | Command      : report_timing_summary -max_paths 10 -file UART_Wrapper_timing_summary_routed.rpt -pb UART_Wrapper_timing_summary_routed.pb -rpx UART_Wrapper_timing_summary_routed.rpx -warn_on_violation
 | Design       : UART_Wrapper
@@ -54,7 +54,7 @@ Table of Contents
 
 1. checking no_clock
 --------------------
- There are 91 register/latch pins with no clock driven by root clock pin: sysclk (HIGH)
+ There are 225 register/latch pins with no clock driven by root clock pin: sysclk (HIGH)
 
 
 2. checking constant_clock
@@ -69,7 +69,7 @@ Table of Contents
 
 4. checking unconstrained_internal_endpoints
 --------------------------------------------
- There are 255 pins that are not constrained for maximum delay. (HIGH)
+ There are 614 pins that are not constrained for maximum delay. (HIGH)
 
  There are 0 pins that are not constrained for maximum delay due to constant clock.
 

@@ -1,3 +1,14 @@
 Vivado Simulator 2019.2
 Time resolution is 1 ps
 Loading Memory
+WARNING: Data truncated while reading Datafile: test_input.mem, while loading at index: 5
+WARNING: Data truncated while reading Datafile: test_input.mem, while loading at index: 6
+WARNING: Data truncated while reading Datafile: test_input.mem, while loading at index: 11
+WARNING: Data truncated while reading Datafile: test_input.mem, while loading at index: 12
+WARNING: Data truncated while reading Datafile: test_input.mem, while loading at index: 13
+WARNING: Data truncated while reading Datafile: test_input.mem, while loading at index: 15
+WARNING: Data truncated while reading Datafile: test_input.mem, while loading at index: 16
+WARNING: Data truncated while reading Datafile: test_input.mem, while loading at index: 17
+WARNING: Data truncated while reading Datafile: test_input.mem, while loading at index: 18
+WARNING: Data truncated while reading Datafile: test_input.mem, while loading at index: 19
+WARNING: Data truncated while reading Datafile: test_input.mem, while loading at index: 20

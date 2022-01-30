@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------
 | Tool Version              : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-| Date                      : Sat Jan 29 16:11:51 2022
+| Date                      : Sun Jan 30 20:52:01 2022
 | Host                      : DESKTOP-864GRHJ running 64-bit major release  (build 9200)
 | Command                   : report_io -file UART_Wrapper_io_placed.rpt
 | Design                    : UART_Wrapper

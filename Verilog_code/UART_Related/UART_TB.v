@@ -28,14 +28,15 @@ module UART_TB(
     reg CLK = 0; // synchronous clk 
 
     // RAM declaration
-    localparam width = 8;
-    localparam Num_input_words = 31;
+    localparam width = 16;
+    localparam Num_input_words = 17;
     localparam Num_output_words = 32;
-    reg [width - 1 : 0] input_mem [0 : Num_input_words - 1];
+    reg [width - 1 : 0] input_mem [0 : 15];
     reg [width - 1 : 0] output_mem [0 : Num_output_words - 1];
 
     // Memory Counter related
     integer word_cnt, packet_bit_counter;
+    integer bit_ptr;
 
     // IO related
     wire uart_data_in;
@@ -61,23 +62,41 @@ module UART_TB(
             uart_data_out = 1; // hold the line high
 
             while (word_cnt < Num_input_words) begin
-                packet_bit_counter = 0;
+                for (bit_ptr = 0; bit_ptr < 2; bit_ptr = bit_ptr + 1) begin
+                    if (bit_ptr == 0) begin
+                        packet_bit_counter = 8;
+                    end else begin
+                        packet_bit_counter = 0;
+                    end
 
-                // send start bit
-                uart_data_out = 0;
+                    // send start bit
+                    uart_data_out = 0;
 
-                // Wait for one cycle
-                #104166;
-                
-                // iterative send data bit by bit
-                while (packet_bit_counter < 8) begin
-                    uart_data_out = input_mem[word_cnt][packet_bit_counter];
-                    packet_bit_counter = packet_bit_counter + 1;
+                    // wait for one cycle
+                    #104166;
+
+                    // iterative send data bit by bit
+                    if (bit_ptr == 0) begin
+                        while (packet_bit_counter < 16) begin
+                            uart_data_out = input_mem[word_cnt][packet_bit_counter];
+                            packet_bit_counter = packet_bit_counter + 1;
+                            #104166;
+                        end
+                    end else begin
+                        while (packet_bit_counter < 8) begin
+                            uart_data_out = input_mem[word_cnt][packet_bit_counter];
+                            packet_bit_counter = packet_bit_counter + 1;
+                            #104166;
+                        end
+                    end
+
+                    // Send stop bit
+                    uart_data_out = 1;
+
+                    // wait for one cycle
                     #104166;
                 end
 
-                uart_data_out = 1;
-                #104166;
                 word_cnt = word_cnt + 1;
             end
 

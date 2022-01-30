@@ -29,7 +29,7 @@ module UART_TX(
     output o_Tx_Done
     );
 
- // States that this controller can be in
+// States that this controller can be in
    parameter s_IDLE          = 3'b000;
    parameter s_TX_START_BIT  = 3'b001;
    parameter s_TX_DATA_BITS  = 3'b010;
