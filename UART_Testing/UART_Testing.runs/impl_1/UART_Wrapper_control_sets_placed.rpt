@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-| Date         : Sun Jan 30 20:52:01 2022
+| Date         : Mon Jan 31 09:45:37 2022
 | Host         : DESKTOP-864GRHJ running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file UART_Wrapper_control_sets_placed.rpt
 | Design       : UART_Wrapper
@@ -27,7 +27,7 @@ Table of Contents
 |    Minimum number of control sets                        |    22 |
 |    Addition due to synthesis replication                 |     0 |
 |    Addition due to physical synthesis replication        |     0 |
-| Unused register locations in slices containing registers |    71 |
+| Unused register locations in slices containing registers |    70 |
 +----------------------------------------------------------+-------+
 * Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
 ** Run report_qor_suggestions for automated merging and remapping suggestions
@@ -58,12 +58,12 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |              33 |           16 |
+| No           | No                    | No                     |              34 |           15 |
 | No           | No                    | Yes                    |               0 |            0 |
 | No           | Yes                   | No                     |               0 |            0 |
-| Yes          | No                    | No                     |              83 |           29 |
+| Yes          | No                    | No                     |              83 |           26 |
 | Yes          | No                    | Yes                    |               0 |            0 |
-| Yes          | Yes                   | No                     |              85 |           30 |
+| Yes          | Yes                   | No                     |              85 |           28 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
@@ -74,27 +74,27 @@ Table of Contents
 |    Clock Signal   |                      Enable Signal                      |                Set/Reset Signal               | Slice Load Count | Bel Load Count |
 +-------------------+---------------------------------------------------------+-----------------------------------------------+------------------+----------------+
 |  sysclk_IBUF_BUFG | UART_TX_Controller/UART_TX/o_Tx_Serial_i_1_n_0          |                                               |                1 |              1 |
-|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[1]                 | UART_RX_Controller/UART_RX/r_Rx_Byte_reg[3]_0 |                1 |              4 |
-|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/r_Rx_DV_reg_1                |                                               |                2 |              4 |
 |  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[2]                 |                                               |                2 |              4 |
-|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[1]_1               |                                               |                2 |              4 |
-|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[3]_0               |                                               |                2 |              4 |
+|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[1]                 | UART_RX_Controller/UART_RX/r_Rx_Byte_reg[3]_1 |                1 |              4 |
+|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[3]_0               |                                               |                1 |              4 |
+|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[1]_1               |                                               |                1 |              4 |
+|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/r_Rx_DV_reg_1                |                                               |                2 |              4 |
 |  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[4][0]              |                                               |                1 |              4 |
 |  sysclk_IBUF_BUFG | UART_TX_Controller/state_reg                            | UART_TX_Controller/state_reg_1                |                1 |              5 |
 |  sysclk_IBUF_BUFG | UART_RX_Controller/Valid_num_reg_1                      | UART_RX_Controller/Valid_num_reg_0            |                2 |              6 |
-|  sysclk_IBUF_BUFG | UART_TX_Controller/UART_TX/E[0]                         |                                               |                3 |              7 |
-|  sysclk_IBUF_BUFG | UART_TX_Controller/UART_TX/r_Tx_Data_0                  |                                               |                2 |              7 |
+|  sysclk_IBUF_BUFG | UART_TX_Controller/UART_TX/r_Tx_Data_0                  |                                               |                1 |              7 |
+|  sysclk_IBUF_BUFG | UART_TX_Controller/UART_TX/E[0]                         |                                               |                4 |              7 |
 |  sysclk_IBUF_BUFG | UART_TX_Controller/UART_TX/r_Clock_Count                | UART_TX_Controller/UART_TX/r_Clock_Count0     |                3 |             11 |
-|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/r_Clock_Count[10]_i_2__0_n_0 | UART_RX_Controller/UART_RX/r_Bit_Index        |                7 |             11 |
-|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/r_Rx_DV_reg_1                | UART_RX_Controller/UART_RX/r_Rx_DV_reg_0      |                4 |             12 |
+|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/r_Clock_Count[10]_i_2__0_n_0 | UART_RX_Controller/UART_RX/r_Bit_Index        |                5 |             11 |
 |  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[2]                 | UART_RX_Controller/Received_1[15]_i_1_n_0     |                4 |             12 |
-|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[1]_1               | UART_RX_Controller/UART_RX/state_reg[1]_0     |                4 |             12 |
 |  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[3]_0               | UART_RX_Controller/UART_RX/state_reg[3]       |                4 |             12 |
+|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/state_reg[1]_1               | UART_RX_Controller/UART_RX/state_reg[1]_0     |                4 |             12 |
+|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/r_Rx_DV_reg_1                | UART_RX_Controller/UART_RX/r_Rx_DV_reg_0      |                4 |             12 |
+|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/E[0]                         |                                               |                6 |             16 |
 |  sysclk_IBUF_BUFG | UART_TX_Controller/BCD_in                               |                                               |                4 |             16 |
-|  sysclk_IBUF_BUFG | UART_RX_Controller/UART_RX/E[0]                         |                                               |                7 |             16 |
 |  sysclk_IBUF_BUFG | UART_TX_Controller/E[0]                                 |                                               |                3 |             16 |
 |  sysclk_IBUF_BUFG | UART_RX_Controller/p_0_in                               |                                               |                3 |             24 |
-|  sysclk_IBUF_BUFG |                                                         |                                               |               16 |             33 |
+|  sysclk_IBUF_BUFG |                                                         |                                               |               15 |             34 |
 +-------------------+---------------------------------------------------------+-----------------------------------------------+------------------+----------------+
 
 

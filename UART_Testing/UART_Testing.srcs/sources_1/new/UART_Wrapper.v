@@ -131,15 +131,6 @@ module UART_Wrapper(
 
     /********** Declaring Submodules ************/
 
-    // UART_TX UART_TX (
-    //     .sysclk(sysclk),
-    //     .i_Tx_Byte(TX_data_out),
-    //     .o_Tx_Serial(uart_rxd_out),
-    //     .o_Tx_Active(TX_Active),
-    //     .o_Tx_Done(TX_Done),
-    //     .i_Tx_start(TX_Start)
-    // );
-
     UART_TX_Flow_ctrl UART_TX_Controller(
         .Clk(sysclk),
         .data_to_be_sent(TX_data_out),
@@ -152,7 +143,7 @@ module UART_Wrapper(
         .Clk(sysclk),
         .i_Rx_Serial(uart_txd_in),
         .Valid_num(RX_Done),
-        .Received_data(RX_received_data)
+        .Data_out(RX_received_data)
     );
 
 endmodule

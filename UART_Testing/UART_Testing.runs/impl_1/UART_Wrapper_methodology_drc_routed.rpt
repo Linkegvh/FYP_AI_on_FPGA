@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-| Date         : Sun Jan 30 20:52:24 2022
+| Date         : Mon Jan 31 09:46:00 2022
 | Host         : DESKTOP-864GRHJ running 64-bit major release  (build 9200)
 | Command      : report_methodology -file UART_Wrapper_methodology_drc_routed.rpt -pb UART_Wrapper_methodology_drc_routed.pb -rpx UART_Wrapper_methodology_drc_routed.rpx
 | Design       : UART_Wrapper
@@ -23,11 +23,11 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 225
+             Violations found: 226
 +-----------+------------------+-----------------------------+------------+
 | Rule      | Severity         | Description                 | Violations |
 +-----------+------------------+-----------------------------+------------+
-| TIMING-17 | Critical Warning | Non-clocked sequential cell | 225        |
+| TIMING-17 | Critical Warning | Non-clocked sequential cell | 226        |
 +-----------+------------------+-----------------------------+------------+
 
 2. REPORT DETAILS
@@ -859,300 +859,305 @@ Related violations: <none>
 
 TIMING-17#166 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_RX_Controller/state_reg[0]/C is not reached by a timing clock
+The clock pin UART_RX_Controller/received_negative_num_reg/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#167 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_RX_Controller/state_reg[1]/C is not reached by a timing clock
+The clock pin UART_RX_Controller/state_reg[0]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#168 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_RX_Controller/state_reg[2]/C is not reached by a timing clock
+The clock pin UART_RX_Controller/state_reg[1]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#169 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_RX_Controller/state_reg[3]/C is not reached by a timing clock
+The clock pin UART_RX_Controller/state_reg[2]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#170 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_RX_Controller/state_reg[4]/C is not reached by a timing clock
+The clock pin UART_RX_Controller/state_reg[3]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#171 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[0]/C is not reached by a timing clock
+The clock pin UART_RX_Controller/state_reg[4]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#172 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[10]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[0]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#173 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[11]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[10]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#174 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[12]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[11]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#175 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[13]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[12]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#176 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[14]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[13]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#177 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[15]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[14]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#178 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[1]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[15]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#179 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[2]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[1]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#180 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[3]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[2]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#181 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[4]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[3]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#182 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[5]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[4]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#183 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[6]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[5]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#184 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[7]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[6]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#185 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[8]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[7]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#186 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/BCD_in_reg[9]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[8]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#187 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/FSM_sequential_TX_state_reg[0]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/BCD_in_reg[9]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#188 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/FSM_sequential_TX_state_reg[1]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/FSM_sequential_TX_state_reg[0]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#189 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/FSM_sequential_TX_state_reg[2]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/FSM_sequential_TX_state_reg[1]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#190 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/Has_previous_non_zero_byte_reg/C is not reached by a timing clock
+The clock pin UART_TX_Controller/FSM_sequential_TX_state_reg[2]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#191 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/TX_Start_reg/C is not reached by a timing clock
+The clock pin UART_TX_Controller/Has_previous_non_zero_byte_reg/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#192 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/TX_data_out_reg[0]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/TX_Start_reg/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#193 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/TX_data_out_reg[1]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/TX_data_out_reg[0]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#194 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/TX_data_out_reg[2]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/TX_data_out_reg[1]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#195 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/TX_data_out_reg[3]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/TX_data_out_reg[2]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#196 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/TX_data_out_reg[4]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/TX_data_out_reg[3]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#197 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/TX_data_out_reg[5]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/TX_data_out_reg[4]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#198 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/TX_data_out_reg[6]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/TX_data_out_reg[5]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#199 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/FSM_sequential_r_SM_Main_reg[0]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/TX_data_out_reg[6]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#200 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/FSM_sequential_r_SM_Main_reg[1]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/FSM_sequential_r_SM_Main_reg[0]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#201 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/FSM_sequential_r_SM_Main_reg[2]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/FSM_sequential_r_SM_Main_reg[1]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#202 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/o_Tx_Serial_reg/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/FSM_sequential_r_SM_Main_reg[2]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#203 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Bit_Index_reg[0]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/o_Tx_Serial_reg/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#204 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Bit_Index_reg[1]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Bit_Index_reg[0]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#205 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Bit_Index_reg[2]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Bit_Index_reg[1]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#206 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[0]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Bit_Index_reg[2]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#207 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[10]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[0]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#208 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[1]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[10]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#209 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[2]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[1]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#210 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[3]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[2]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#211 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[4]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[3]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#212 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[5]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[4]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#213 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[6]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[5]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#214 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[7]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[6]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#215 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[8]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[7]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#216 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[9]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[8]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#217 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Tx_Active_reg/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Clock_Count_reg[9]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#218 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[0]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Tx_Active_reg/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#219 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[1]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[0]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#220 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[2]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[1]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#221 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[3]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[2]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#222 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[4]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[3]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#223 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[5]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[4]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#224 Critical Warning
 Non-clocked sequential cell  
-The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[6]/C is not reached by a timing clock
+The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[5]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#225 Critical Warning
+Non-clocked sequential cell  
+The clock pin UART_TX_Controller/UART_TX/r_Tx_Data_reg[6]/C is not reached by a timing clock
+Related violations: <none>
+
+TIMING-17#226 Critical Warning
 Non-clocked sequential cell  
 The clock pin state_reg/C is not reached by a timing clock
 Related violations: <none>

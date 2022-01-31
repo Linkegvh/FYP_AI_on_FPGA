@@ -26,16 +26,23 @@ module UART_RX_Flow_ctrl #(
     input Clk,
     input i_Rx_Serial,
     output reg Valid_num, 
-    output reg [2 ** Bit_width_counter - 1 : 0] Received_data 
+    output [2 ** Bit_width_counter - 1 : 0] Data_out 
     );
 
     // UART module related signals
     wire RX_Done;
     wire [7:0] RX_received_data; // UART can only do 8 bit
 
-    // Combinational logics to check if the received value is indeed a number
+    // Combinational logics to check if the received value is indeed a number or a negative number
     wire RX_received_data_is_number;
     assign RX_received_data_is_number = (RX_received_data[7:4] == 4'b0011 && RX_received_data[3:0] <= 4'b1001) ? 1 : 0; // 0 ~ 9 in ascii table is 48 ~ 57 and it can be represented slightly differently
+    wire negative_sign;
+    assign negative_sign = (RX_received_data == 8'h2D); // "-" is 0x2D in ASCII encoding
+    reg received_negative_num = 0;
+
+    // Output data logic (catered primarily for negative number)
+    reg [2 ** Bit_width_counter - 1 : 0] Received_data;
+    assign Data_out = received_negative_num ? (~Received_data + 1) : Received_data;
 
     // State assignment -- One hot encoding
     localparam special_state = 5'b00000;
@@ -52,22 +59,6 @@ module UART_RX_Flow_ctrl #(
     reg [15:0] Received_3;
     reg [15:0] Received_4;
 
-
-    // Combination multiplication calculation
-    // wire [15:0] Byte_0_times_1000;
-    // wire [15:0] Byte_0_times_100;
-    // wire [15:0] Byte_0_times_10;
-    // wire [15:0] Byte_1_times_100;
-    // wire [15:0] Byte_1_times_10;
-    // wire [15:0] Byte_2_times_10;
-
-    // assign Byte_0_times_1000 = Received_byte_0 * 1000;
-    // assign Byte_0_times_100 = Received_byte_0 * 100;
-    // assign Byte_0_times_10 = Received_byte_0 * 10;
-    // assign Byte_1_times_100 = Received_byte_1 * 100;
-    // assign Byte_1_times_10 = Received_byte_1 * 10;
-    // assign Byte_2_times_10 = Received_byte_3 * 10;
-
     /********* Actual Flow Control Logic *********/
     always @ (posedge Clk) begin
         case (state) 
@@ -81,9 +72,13 @@ module UART_RX_Flow_ctrl #(
                             // if the received data is a number, save it into received byte_0 with the correct format
                             Received_0 <= {12'd0, RX_received_data[3:0]}; // essentially the last 4 bit represents the number
                             state <= Byte_1;
+                        end else if (negative_sign) begin
+                            received_negative_num <= 1;
+                            state <= Byte_0;
                         end else begin 
                             // if the received data is not a real number, next state is still Byte_0
                             state <= Byte_0;
+                            received_negative_num <= 0; // it has to be a negative sign followed by a valid number, otherwise it is not a valid input
                         end
                     end
                 end
