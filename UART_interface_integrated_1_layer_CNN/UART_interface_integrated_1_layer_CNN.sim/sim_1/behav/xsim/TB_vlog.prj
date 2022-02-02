@@ -1,0 +1,24 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Adder.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Compute_Processor.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Data_RAM.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Multiply.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/RES_RAM.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Simple_RAM.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/UART_RX.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/UART_RX_Flow_ctrl.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/UART_TX.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/UART_TX_Flow_ctrl.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Weight_RAM.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/bin2bcd.v" \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/myip.v" \
+
+sv xil_defaultlib  \
+"../../../../UART_interface_integrated_1_layer_CNN.srcs/sim_1/new/TB.sv" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort
