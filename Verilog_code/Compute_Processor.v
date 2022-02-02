@@ -46,7 +46,7 @@ module Compute_Processor
     input [Bit_width - 1 : 0] Weight_read_out_5,
 
     // Address & RAM Enables for Data
-    output reg [Dataset_depth_counter_bits - 1 : 0] Data_RAM_address,
+    output reg [Dataset_depth_counter_bits - 1 : 0] Data_RAM_address = 0,
     output reg Data_RAM_Read_Enable_Reg,
 
     // Address & RAM Enables for Weights
@@ -88,8 +88,7 @@ module Compute_Processor
     reg [1:0] MUL_Enable_Reg;
     reg Done_Reg;
 
-    wire [Dataset_depth_counter_bits - 1 : 0] Data_RAM_Address_next;
-    assign Data_RAM_Address_next = Data_RAM_Read_Enable_Reg ? Data_RAM_address + 1 : 0;
+    reg [Dataset_depth_counter_bits - 1 : 0] Data_RAM_Address_next = 0;
 
     // Multiplication stage related declaration & Assignment
     reg ADD_Enable_MUL;
@@ -158,6 +157,7 @@ module Compute_Processor
             ADD_Enable_Reg <= Instr[7];
             Done_Reg <= Instr[8];
 
+            Data_RAM_Address_next <= Data_RAM_Address_next + Enable;
             Data_RAM_address <= Data_RAM_Address_next;
         end else begin
             Data_RAM_Read_Enable_Reg <= 0;
@@ -166,6 +166,8 @@ module Compute_Processor
             MUL_Enable_Reg <= 0;
             ADD_Enable_Reg <= 0;
             Done_Reg <= 0;
+            Data_RAM_address <= 0;
+            Data_RAM_Address_next <= 0;
         end
 
         // Multiply stage related

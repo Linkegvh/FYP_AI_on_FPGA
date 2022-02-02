@@ -1,0 +1,29 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Adder.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Adder
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Compute_Processor.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Compute_Processor
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Data_RAM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Data_RAM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Multiply.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Multiply
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/RES_RAM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RES_RAM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Simple_RAM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Simple_RAM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/UART_RX.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module UART_RX
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/UART_RX_Flow_ctrl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module UART_RX_Flow_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/UART_TX.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module UART_TX
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/UART_TX_Flow_ctrl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module UART_TX_Flow_ctrl
+INFO: [VRFC 10-2458] undeclared symbol TX_Done, assumed default net type wire [C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/UART_TX_Flow_ctrl.v:199]
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/Weight_RAM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Weight_RAM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/bin2bcd.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bin2bcd
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/myip.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module myip
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sim_1/new/testbench.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Testbench

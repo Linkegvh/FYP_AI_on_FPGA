@@ -29,7 +29,7 @@ module UART_TB(
 
     // RAM declaration
     localparam width = 8;
-    localparam Num_input_words = 5;
+    localparam Num_input_words = 60;
     localparam Num_output_words = 32;
     reg [width - 1 : 0] input_mem [0 : 50];
     reg [width - 1 : 0] output_mem [0 : Num_output_words - 1];
