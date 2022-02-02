@@ -66,7 +66,7 @@ module myip(
     localparam Number_of_weights_depth = 3;
 
     // Overall IO parameters
-    localparam Total_number_of_input_words = 560; // need adjustment whenever neceessary
+    localparam Total_number_of_input_words = 512; // need adjustment whenever neceessary
     localparam Total_number_of_weights = 48;
     localparam Total_number_of_output_words = 4096;
 
@@ -98,12 +98,12 @@ module myip(
     wire [Number_of_bits - 1 : 0] Data_read_out_4;
 
     // Weight RAM Related
-    reg Weight_write_en;
+    // reg Weight_write_en;
     wire Weight_read_en;
     wire [Feature_counter_bits - 1 : 0] Weight_read_address_depth; 
-    reg [Feature_counter_bits - 1 : 0] Weight_write_address_depth;
-    reg [Feature_counter_bits - 1 : 0] Weight_write_address_width; 
-    reg [Number_of_bits - 1 : 0] Weight_write_data_in;
+    // reg [Feature_counter_bits - 1 : 0] Weight_write_address_depth;
+    // reg [Feature_counter_bits - 1 : 0] Weight_write_address_width; 
+    // reg [Number_of_bits - 1 : 0] Weight_write_data_in;
     
     wire [Number_of_bits - 1 : 0] Weight_read_out_0;
     wire [Number_of_bits - 1 : 0] Weight_read_out_1;
@@ -178,9 +178,9 @@ module myip(
                         Data_write_en <= 0;
 
                         // Weights_RAM related
-                        Weight_write_address_width <= 0;
-                        Weight_write_address_depth <= 0;
-                        Weight_write_en <= 0;
+                        // Weight_write_address_width <= 0;
+                        // Weight_write_address_depth <= 0;
+                        // Weight_write_en <= 0;
 
                         // Others
                         Compute_enable <= 0;
@@ -196,37 +196,43 @@ module myip(
                                 nr_of_reads <= nr_of_reads - 1;
                             end     
 
-                            if (nr_of_reads >= Total_number_of_weights) begin // if we are reading data
-                                Data_write_en <= 1;
-                                Data_write_data_in <= S_AXIS_TDATA;
+                            Data_write_en <= 1;
+                            Data_write_data_in <= S_AXIS_TDATA;
 
-                                // Address increment for data
-                                Data_write_address_depth <= Data_write_address_depth + Data_write_en;
-                            end else begin
-                                Data_write_en <= 0;
-                            end
+                            // Address increment for data
+                            Data_write_address_depth <= Data_write_address_depth + Data_write_en;
 
-                            if (nr_of_reads <= Total_number_of_weights - 1) begin // if we are reading weights
-                                Weight_write_en <= 1;
-                                Weight_write_data_in <= S_AXIS_TDATA;
+                            // if (nr_of_reads >= Total_number_of_weights) begin // if we are reading data
+                            //     Data_write_en <= 1;
+                            //     Data_write_data_in <= S_AXIS_TDATA;
 
-                                // Address Increment for weights
-                                if (Weight_write_address_width < 5) begin // Total 6 items in a single row
-                                    Weight_write_address_width <= Weight_write_address_width + Weight_write_en;
-                                end else begin
-                                    Weight_write_address_width <= 0;
-                                end
+                            //     // Address increment for data
+                            //     Data_write_address_depth <= Data_write_address_depth + Data_write_en;
+                            // end else begin
+                            //     Data_write_en <= 0;
+                            // end
 
-                                if (Weight_write_address_width == 5) begin
-                                    Weight_write_address_depth <= Weight_write_address_depth + Weight_write_en;
-                                end
-                            end
+                            // if (nr_of_reads <= Total_number_of_weights - 1) begin // if we are reading weights
+                            //     Weight_write_en <= 1;
+                            //     Weight_write_data_in <= S_AXIS_TDATA;
+
+                            //     // Address Increment for weights
+                            //     if (Weight_write_address_width < 5) begin // Total 6 items in a single row
+                            //         Weight_write_address_width <= Weight_write_address_width + Weight_write_en;
+                            //     end else begin
+                            //         Weight_write_address_width <= 0;
+                            //     end
+
+                            //     if (Weight_write_address_width == 5) begin
+                            //         Weight_write_address_depth <= Weight_write_address_depth + Weight_write_en;
+                            //     end
+                            // end
                         end
                     end     
                 Compute:
                     begin
                         // Reset previous control
-                        Weight_write_en = 0;
+                        // Weight_write_en = 0;
                         Data_write_en = 0;
 
                         // When done, change state to write_output
@@ -296,12 +302,12 @@ module myip(
     ) Weight_RAM (
         // Input 
         .Clk(ACLK),
-        .Write_en(Weight_write_en),
+        // .Write_en(Weight_write_en),
         .Read_en(Weight_read_en),
         .Address_depth_read(Weight_read_address_depth),
-        .Address_depth_write(Weight_write_address_depth),
-        .Address_width_write(Weight_write_address_width),
-        .Write_data_in(Weight_write_data_in),
+        // .Address_depth_write(Weight_write_address_depth),
+        // .Address_width_write(Weight_write_address_width),
+        // .Write_data_in(Weight_write_data_in),
 
         // Output
         .Read_data_out_0(Weight_read_out_0),

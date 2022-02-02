@@ -17,8 +17,8 @@ Compiling module unisims_ver.LUT2
 Compiling module unisims_ver.LUT4
 Compiling module unisims_ver.x_lut3_mux8
 Compiling module unisims_ver.LUT3
-Compiling module unisims_ver.LUT6
 Compiling module unisims_ver.LUT5
+Compiling module unisims_ver.LUT6
 Compiling module xil_defaultlib.Adder
 Compiling module unisims_ver.SRL16E_default
 Compiling module xil_defaultlib.Simple_RAM
@@ -35,7 +35,7 @@ Compiling module xil_defaultlib.Data_RAM
 Compiling module unisims_ver.OBUF
 Compiling module unisims_ver.MUXF8
 Compiling module xil_defaultlib.RES_RAM
-Compiling module unisims_ver.RAM32M(IS_WCLK_INVERTED=1'b1)
+Compiling module unisims_ver.FDSE(IS_C_INVERTED=1'b1)
 Compiling module xil_defaultlib.Weight_RAM
 Compiling module xil_defaultlib.myip
 Compiling module xil_defaultlib.tb_myip_v1_0
