@@ -29,7 +29,7 @@ module uCode
         input [8:0] Width,
 
         // Output
-        output reg [12:0] pipeline_uCode,
+        output reg [15:0] pipeline_uCode,
         output reg [23:0] Data_Read_uCode,
         output reg [23:0] Data_Write_uCode,
         output reg [14:0] Weight_Read_uCode
@@ -45,7 +45,9 @@ module uCode
     localparam FC_2nd = 9'b0000_0000_1; 
     /*
         Pipeline uCode:
-
+        Bit 15: Comparator_Ctrl_Reg[1]
+        Bit 16: Comparator_Ctrl_Reg[0]
+        Bit 13: Data_Write_Mux_Reg
         Bit 12: Adder_Input_Reg
         Bit 11: Adder_Ctrl_Reg[1]
         Bit 10: Adder_Ctrl_Reg[0]
@@ -122,7 +124,9 @@ module uCode
             CONV1D_1st:
                 begin
                     // Pipeline uCode related
-                    pipeline_uCode[12] <= 1;
+                    pipeline_uCode[15:14] <= 2'b01;
+                    pipeline_uCode[13] <= 0;
+                    pipeline_uCode[12] <= 0;
                     pipeline_uCode[11:10] <= 2'b11;
                     pipeline_uCode[9:4] <= 6'b111111;
                     pipeline_uCode[3] <= 0;
@@ -149,6 +153,8 @@ module uCode
             MaxPool:
                 begin
                     // Pipelining uCode related
+                    pipeline_uCode[15:14] <= 2'b01;
+                    pipeline_uCode[13] <= 0;
                     pipeline_uCode[12] <= 0;
                     pipeline_uCode[11:10] <= 2'b0;
                     pipeline_uCode[9:4] <= 6'b0;
@@ -173,6 +179,8 @@ module uCode
             CONV1D_2nd:
                 begin
                     // Pipelining uCode related
+                    pipeline_uCode[15:14] <= 2'b01;
+                    pipeline_uCode[13] <= 0;
                     pipeline_uCode[12] <= (Height == 0) ? 0 : 1;
                     pipeline_uCode[11:10] <= (Height == 7) ? 2'b11: 2'b0;
                     pipeline_uCode[9:4] <= (Height == 0) ? 6'b111100 : 6'b011100;
@@ -200,6 +208,9 @@ module uCode
             CONV1D_3rd:
                 begin
                     // Pipelining uCode related
+                    pipeline_uCode[15] <= (Height == 0);
+                    pipeline_uCode[14] <= (Width == 0);
+                    pipeline_uCode[13] <= (Height == 15);
                     pipeline_uCode[12] <= (Height == 0) ? 0 : 1;
                     pipeline_uCode[11:10] <= (Height == 15) ? 2'b11: 2'b0;
                     pipeline_uCode[9:4] <= (Height == 0) ? 6'b111100 : 6'b011100;
@@ -220,39 +231,42 @@ module uCode
                     Data_Read_uCode[0] <= 1;
 
                     // Data Write uCode related
-                    Data_Write_uCode[23:15] <= Width;
+                    // Data_Write_uCode[23:15] <= Width;
+                    Data_Write_uCode[23:15] <= 0;
                     Data_Write_uCode[14:10] <= Depth;
-                    Data_Write_uCode[0] <= 1;
+                    // Data_Write_uCode[0] <= 1;
+                    Data_Write_uCode[0] <= (Height == 15);
                 end
-            Global_MaxPool:
-                begin
-                    // Pipelining uCode related
-                    pipeline_uCode[12] <= 0;
-                    pipeline_uCode[11:10] <= 2'b0;
-                    pipeline_uCode[9:4] <= 6'b0;
-                    pipeline_uCode[3] <= 1;
-                    pipeline_uCode[2] <= 1;
-                    pipeline_uCode[1] <= 1;
-                    pipeline_uCode[0] <= 0;
+            // Global_MaxPool:
+            //     begin
+            //         // Pipelining uCode related
+            //         pipeline_uCode[12] <= 0;
+            //         pipeline_uCode[11:10] <= 2'b0;
+            //         pipeline_uCode[9:4] <= 6'b0;
+            //         pipeline_uCode[3] <= 1;
+            //         pipeline_uCode[2] <= 1;
+            //         pipeline_uCode[1] <= 1;
+            //         pipeline_uCode[0] <= 0;
 
-                    // Weight Read uCode related
-                    Weight_Read_uCode <= 0;
+            //         // Weight Read uCode related
+            //         Weight_Read_uCode <= 0;
 
-                    // Data Read uCode related
-                    Data_Read_uCode[23:15] <= Width;
-                    Data_Read_uCode[14:10] <= Depth;
-                    Data_Read_uCode[0] <= 1;
+            //         // Data Read uCode related
+            //         Data_Read_uCode[23:15] <= Width;
+            //         Data_Read_uCode[14:10] <= Depth;
+            //         Data_Read_uCode[0] <= 1;
 
-                    // Data Write uCode related
-                    Data_Write_uCode[23:15] <= { {4'b0}, Depth};
-                    Data_Write_uCode[14:10] <= 0;
-                    Data_Write_uCode[0] <= 1;
-                end
+            //         // Data Write uCode related
+            //         Data_Write_uCode[23:15] <= { {4'b0}, Depth};
+            //         Data_Write_uCode[14:10] <= 0;
+            //         Data_Write_uCode[0] <= 1;
+            //     end
             FC_1st:
                 begin
                     // Pipelining uCode related
-                    // Pipelining uCode related
-                    pipeline_uCode[12] <= (Width == 0);
+                    pipeline_uCode[15:14] <= 2'b01;
+                    pipeline_uCode[13] <= 0;
+                    pipeline_uCode[12] <= (Width != 0);
                     pipeline_uCode[11:10] <= (Width == 6) ? 2'b11 : 2'b00; // 5 * 7 = 35 and we have a total of 32 calcualtions
                     pipeline_uCode[9:4] <= (Width == 0) ? 6'b111111 : 6'b011111;
                     pipeline_uCode[3] <= 0;
@@ -279,13 +293,15 @@ module uCode
             FC_2nd:
                 begin
                     // Pipelining uCode related
-                    pipeline_uCode[12] <= (Width == 0);
-                    pipeline_uCode[11:10] <= (Width == 4) ? 2'b11 : 2'b00; // 5 * 4 = 20 and we have a total of 16 calculations
+                    pipeline_uCode[15:14] <= 2'b01;
+                    pipeline_uCode[13] <= 0;
+                    pipeline_uCode[12] <= (Width != 0);
+                    pipeline_uCode[11:10] <= (Width == 3) ? 2'b11 : 2'b00; // 5 * 4 = 20 and we have a total of 16 calculations
                     pipeline_uCode[9:4] <= (Width == 0) ? 6'b111111 : 6'b011111;
                     pipeline_uCode[3] <= 0;
                     pipeline_uCode[2] <= 0;
                     pipeline_uCode[1] <= 0;
-                    pipeline_uCode[0] <= (Width == 4) ? 1 : 0; // last cycle will be 1
+                    pipeline_uCode[0] <= (Width == 3) ? 1 : 0; // last cycle will be 1
 
                     // Weight Read uCode related
                     Weight_Read_uCode[14:11] <= Width[3:0];
@@ -294,7 +310,7 @@ module uCode
                     Weight_Read_uCode[0] <= 1;
 
                     // Data Read uCode related
-                    Data_Read_uCode[23:15] <= 0;
+                    Data_Read_uCode[23:15] <= Width * 5;
                     Data_Read_uCode[14:10] <= 0;
                     Data_Read_uCode[0] <= 1;
                 end

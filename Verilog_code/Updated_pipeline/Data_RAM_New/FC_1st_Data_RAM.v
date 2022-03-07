@@ -29,16 +29,30 @@ module FC_1st_Data_RAM
     // RAM reg creation 32 * 16 bit
     reg [Bit_width - 1 : 0] RAM [0 : RAM_Depth - 1];
 
+    // Address width pointer
+    wire [4:0] Data_1_Width;
+    wire [4:0] Data_2_Width;
+    wire [4:0] Data_3_Width;
+    wire [4:0] Data_4_Width;
+
+    assign Data_1_Width = Read_Width + 1;
+    assign Data_2_Width = Read_Width + 2;
+    assign Data_3_Width = Read_Width + 3;
+    assign Data_4_Width = Read_Width + 4;
+
+
     always @ (negedge CLK) begin
         // Write
         if (Write_Enable) begin
             RAM[Write_Width] <= data_in;
-        end else if (Read_Enable) begin
+        end 
+        
+        if (Read_Enable) begin
             data_out_0 <= RAM[Read_Width];
-            data_out_1 <= Read_Width < 32 - 1 ? RAM[Read_Width + 1] : 0;
-            data_out_2 <= Read_Width < 32 - 2 ? RAM[Read_Width + 2] : 0;
-            data_out_3 <= Read_Width < 32 - 3 ? RAM[Read_Width + 3] : 0;
-            data_out_4 <= Read_Width < 32 - 4 ? RAM[Read_Width + 4] : 0;
+            data_out_1 <= Read_Width < 32 - 1 ? RAM[Data_1_Width] : 0;
+            data_out_2 <= Read_Width < 32 - 2 ? RAM[Data_2_Width] : 0;
+            data_out_3 <= Read_Width < 32 - 3 ? RAM[Data_3_Width] : 0;
+            data_out_4 <= Read_Width < 32 - 4 ? RAM[Data_4_Width] : 0;
         end
     end
 

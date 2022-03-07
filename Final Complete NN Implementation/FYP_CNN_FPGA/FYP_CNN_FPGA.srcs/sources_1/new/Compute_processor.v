@@ -48,6 +48,9 @@ module Compute_Processor
 
     // Parameter declaration
     /*
+        Bit 15: Comparator_Ctrl_Reg[1]
+        Bit 16: Comparator_Ctrl_Reg[0]
+        Bit 13: Data_Write_Mux_Reg
         Bit 12: Adder_Input_Reg
         Bit 11: Adder_Ctrl_Reg[1]
         Bit 10: Adder_Ctrl_Reg[0]
@@ -62,7 +65,7 @@ module Compute_Processor
         Bit 1 : ALU_Mux_Reg
         Bit 0 : Compute_Done_Reg
     */
-    localparam Pipelining_Control_uCode_bit_width = 13;
+    localparam Pipelining_Control_uCode_bit_width = 16;
 
     localparam CONV1D_1st = 9'b0010_0000_0; localparam CONV1D_1st_depth_num = 5'd7; localparam CONV1D_1st_width_num = 9'd511;
     localparam MaxPool = 9'b0001_0000_0; localparam MaxPool_depth_num = 5'd7; localparam MaxPool_width_num = 9'd255;
@@ -129,7 +132,7 @@ module Compute_Processor
                             end else begin // else keep incrementing address
                                 Height <= (Height == CONV1D_2nd_height_num) ? 0 : Height + 1;
                                 Width <= (Height == CONV1D_2nd_height_num) ? (Width == CONV1D_2nd_width_num) ? 0 : Width + 1 : Width;
-                                Depth <= (Width == CONV1D_2nd_depth_num) ? Depth + 1 : Depth;
+                                Depth <= (Height == CONV1D_2nd_height_num && Width == CONV1D_2nd_width_num) ? Depth + 1 : Depth;
                             end
                         end else begin
                             // reset
@@ -142,13 +145,13 @@ module Compute_Processor
                     begin
                         if (delay_by_1_cycle) begin
                             if (Depth == CONV1D_3rd_depth_num && Width == CONV1D_3rd_width_num && Height == CONV1D_3rd_height_num) begin // State transtion trigger
-                                Compute_stage <= CONV1D_3rd;
+                                Compute_stage <= FC_1st; // Jump to FC_1st
                                 Depth <= 0; Width <= 0; Height <= 0;
                                 delay_by_1_cycle <= 0;
                             end else begin // else keep incrementing address
                                 Height <= (Height == CONV1D_3rd_height_num) ? 0 : Height + 1;
                                 Width <= (Height == CONV1D_3rd_height_num) ? (Width == CONV1D_3rd_width_num) ? 0 : Width + 1 : Width;
-                                Depth <= (Width == CONV1D_3rd_depth_num) ? Depth + 1 : Depth;
+                                Depth <= (Height == CONV1D_3rd_height_num && Width == CONV1D_3rd_width_num) ? Depth + 1 : Depth;
                             end
                         end else begin
                             // reset
@@ -157,65 +160,65 @@ module Compute_Processor
                             delay_by_1_cycle <= 1; // Delay the whole thing by cycle
                         end
                     end
-                Global_MaxPool:
-                    begin
-                        if (delay_by_1_cycle) begin
-                            case (Height) // we reuse height here as an one-hot encoding state machine
-                                4'b0001:
-                                    begin
-                                        if (Width == Global_MaxPool_width_num_0) begin // transition
-                                            Height <= 4'b0010;
-                                            Width <= 0; // reset width
-                                        end else begin
-                                            Width <= Width + 1; // else keep iterating
-                                        end
-                                    end
-                                4'b0010:
-                                    begin
-                                        if (Width == Global_MaxPool_width_num_1) begin // transition
-                                            Height <= 4'b0100;
-                                            Width <= 0; // reset width
-                                        end else begin
-                                            Width <= Width + 1; // else keep iterating
-                                        end
-                                    end
-                                4'b0100:
-                                    begin
-                                        if (Width == Global_MaxPool_width_num_2) begin // transition
-                                            Height <= 4'b1000;
-                                            Width <= 0; // reset width
-                                        end else begin
-                                            Width <= Width + 1; // else keep iterating
-                                        end
-                                    end
-                                4'b1000:
-                                    begin
-                                        if (Depth == Global_MaxPool_depth_num) begin // transition out
-                                            Compute_stage <= FC_1st;
-                                            Depth <= 0; Width <= 0; Height <= 0;
-                                            delay_by_1_cycle <= 0;
-                                        end else begin
-                                            Compute_stage <= Global_MaxPool;
-                                            Depth <= Depth + 1;
-                                            Width <= 0; Height <= 4'b0001;
-                                        end
-                                    end
+                // Global_MaxPool:
+                //     begin
+                //         if (delay_by_1_cycle) begin
+                //             case (Height) // we reuse height here as an one-hot encoding state machine
+                //                 4'b0001:
+                //                     begin
+                //                         if (Width == Global_MaxPool_width_num_0) begin // transition
+                //                             Height <= 4'b0010;
+                //                             Width <= 0; // reset width
+                //                         end else begin
+                //                             Width <= Width + 1; // else keep iterating
+                //                         end
+                //                     end
+                //                 4'b0010:
+                //                     begin
+                //                         if (Width == Global_MaxPool_width_num_1) begin // transition
+                //                             Height <= 4'b0100;
+                //                             Width <= 0; // reset width
+                //                         end else begin
+                //                             Width <= Width + 1; // else keep iterating
+                //                         end
+                //                     end
+                //                 4'b0100:
+                //                     begin
+                //                         if (Width == Global_MaxPool_width_num_2) begin // transition
+                //                             Height <= 4'b1000;
+                //                             Width <= 0; // reset width
+                //                         end else begin
+                //                             Width <= Width + 1; // else keep iterating
+                //                         end
+                //                     end
+                //                 4'b1000:
+                //                     begin
+                //                         if (Depth == Global_MaxPool_depth_num) begin // transition out
+                //                             Compute_stage <= FC_1st;
+                //                             Depth <= 0; Width <= 0; Height <= 0;
+                //                             delay_by_1_cycle <= 0;
+                //                         end else begin
+                //                             Compute_stage <= Global_MaxPool;
+                //                             Depth <= Depth + 1;
+                //                             Width <= 0; Height <= 4'b0001;
+                //                         end
+                //                     end
 
-                                default:
-                                    begin
-                                        // Reset into the correct state
-                                        Compute_stage <= Global_MaxPool;
-                                        Depth <= 0; Width <= 0; Height <= 4'b0001;
-                                    end
-                            endcase
+                //                 default:
+                //                     begin
+                //                         // Reset into the correct state
+                //                         Compute_stage <= Global_MaxPool;
+                //                         Depth <= 0; Width <= 0; Height <= 4'b0001;
+                //                     end
+                //             endcase
 
-                        end else begin
-                            // reset
-                            Compute_stage <= Global_MaxPool;
-                            Depth <= 0; Width <= 0; Height <= 0;
-                            delay_by_1_cycle <= 1; // Delay the whole thing by cycle
-                        end
-                    end
+                //         end else begin
+                //             // reset
+                //             Compute_stage <= Global_MaxPool;
+                //             Depth <= 0; Width <= 0; Height <= 0;
+                //             delay_by_1_cycle <= 1; // Delay the whole thing by cycle
+                //         end
+                //     end
                 FC_1st:
                     begin
                         if (delay_by_1_cycle) begin
@@ -287,6 +290,8 @@ module Compute_Processor
     reg Mul_Mux_Control_reg;
     reg Mul_Mux_Sel_Reg;
     reg ALU_Mux_Reg;
+    reg Data_Write_Mux_Reg;
+    reg [1:0] Comparator_Ctrl_Reg;
 
     // Address & RAM Enables for Weights
     reg [14:0] Weight_Read_Control; // 15 bits (refer to google doc for detailed mapping)
@@ -309,7 +314,9 @@ module Compute_Processor
     reg ALU_Mux_MUL;
     reg [5:0] Mul_Path_Enable;
     wire Final_Mul_Mux_Control; // the actual control signal for the Mux
-
+    wire [23:0] Data_Write_Control_MUL_Muxed;
+    reg Data_Write_Mux_MUL;
+    reg [1:0] Comparator_Ctrl_MUL;
 
     reg [Bit_width - 1 : 0] Mul_input_data_0;
     reg [Bit_width - 1 : 0] Mul_input_data_1;
@@ -342,10 +349,10 @@ module Compute_Processor
 
     // sign extend the read in data if needed
     assign Mul_Mux_data_out_0 = Final_Mul_Mux_Control ? { {16{Data_read_out_0[Bit_width-1]}}, Data_read_out_0} : Mul_output_mul_data_0;
-    assign Mul_Mux_data_out_1 = Final_Mul_Mux_Control ? { {16{Data_read_out_1[Bit_width-1]}}, Data_read_out_0} : Mul_output_mul_data_1;
-    assign Mul_Mux_data_out_2 = Final_Mul_Mux_Control ? { {16{Data_read_out_2[Bit_width-1]}}, Data_read_out_0} : Mul_output_mul_data_2;
-    assign Mul_Mux_data_out_3 = Final_Mul_Mux_Control ? { {16{Data_read_out_3[Bit_width-1]}}, Data_read_out_0} : Mul_output_mul_data_3;
-    assign Mul_Mux_data_out_4 = Final_Mul_Mux_Control ? { {16{Data_read_out_4[Bit_width-1]}}, Data_read_out_0} : Mul_output_mul_data_4;
+    assign Mul_Mux_data_out_1 = Final_Mul_Mux_Control ? { {16{Data_read_out_1[Bit_width-1]}}, Data_read_out_1} : Mul_output_mul_data_1;
+    assign Mul_Mux_data_out_2 = Final_Mul_Mux_Control ? { {16{Data_read_out_2[Bit_width-1]}}, Data_read_out_2} : Mul_output_mul_data_2;
+    assign Mul_Mux_data_out_3 = Final_Mul_Mux_Control ? { {16{Data_read_out_3[Bit_width-1]}}, Data_read_out_3} : Mul_output_mul_data_3;
+    assign Mul_Mux_data_out_4 = Final_Mul_Mux_Control ? { {16{Data_read_out_4[Bit_width-1]}}, Data_read_out_4} : Mul_output_mul_data_4;
     assign Mul_Mux_data_out_5 = Final_Mul_Mux_Control ? 0 : Mul_output_mul_data_5;
 
     // ALU Stage
@@ -368,19 +375,30 @@ module Compute_Processor
     wire [2 * Bit_width - 1 : 0] ALU_output;
     assign ALU_output = (ALU_Mux_Ctrl) ? Comparator_output : Adder_output;
 
+    // ALU CMP (2 > 1) 
+    reg [1:0] Comparator_Ctrl;
+
+    reg Data_Write_Mux_ALU;
+    // reg [Bit_width - 1 : 0] Data_Write_Latch = 0;
+    wire signed [Bit_width - 1 : 0] CMP_2_to_1_output;
+    // assign CMP_2_to_1_output = (ALU_output[15:0] > Data_Write_Latch) ? ALU_output[15:0] : Data_Write_Latch;
+
     // Mem write stage
-    reg [2 * Bit_width - 1 : 0] Data_Write_32_bit;    
+    reg [2 * Bit_width - 1 : 0] Data_Write_32_bit;
 
     // Other assignments
     assign Additional_input = (Adder_Input_Mux) ? Data_Write_32_bit : 0;
+    assign Data_Write_Control_MUL_Muxed = (MUL_Mux_Sel) ? Data_Write_Control_Reg : Data_Write_Control_MUL;
 
     /**************** Actual pipelining *******************/
     always @ (posedge Clk) begin
 
         // Decode Stage related
         if (Enable) begin
+            Comparator_Ctrl_Reg <= uCode[15:14];
+            Data_Write_Mux_Reg <= uCode[13];
             Adder_Input_Reg <= uCode[12];
-            Adder_Ctrl_Reg <= uCode[11:0];
+            Adder_Ctrl_Reg <= uCode[11:10];
             Mul_Path_Enable_Reg <= uCode[9:4];
             Mul_Mux_Control_reg <= uCode[3];
             Mul_Mux_Sel_Reg <= uCode[2];
@@ -391,6 +409,8 @@ module Compute_Processor
             Data_Read_Control <= Data_Read_Addr_Ctrl;
             Weight_Read_Control <= Weight_Read_Addr_Ctrl;
         end else begin
+            Comparator_Ctrl_Reg <= 2'b01; // keep resetting
+            Data_Write_Mux_Reg <= 0;
             Adder_Input_Reg <= 0;
             Adder_Ctrl_Reg <= 0;
             Mul_Path_Enable_Reg <= 0;
@@ -408,6 +428,8 @@ module Compute_Processor
         MUL_Mux_Sel <= Mul_Mux_Sel_Reg;
         ALU_Mux_MUL <= ALU_Mux_Reg;
         Compute_Done_MUL <= Compute_Done_Reg;
+        Data_Write_Mux_MUL <= Data_Write_Mux_Reg;
+        Comparator_Ctrl_MUL <= Comparator_Ctrl_Reg;
         
         Data_Write_Control_MUL <= Data_Write_Control_Reg;
 
@@ -429,8 +451,10 @@ module Compute_Processor
         Adder_Ctrl <= Adder_Ctrl_MUL;
         ALU_Mux_Ctrl <= ALU_Mux_MUL;
         Compute_Done_ALU <= Compute_Done_MUL;
+        Data_Write_Mux_ALU <= Data_Write_Mux_MUL;
+        Comparator_Ctrl <= Comparator_Ctrl_MUL;
         
-        Data_Write_Control_ALU <= Data_Write_Control_MUL;
+        Data_Write_Control_ALU <= Data_Write_Control_MUL_Muxed;
 
         Mul_output_mul_data_ALU_0 <= Mul_Mux_data_out_0;
         Mul_output_mul_data_ALU_1 <= Mul_Mux_data_out_1;
@@ -442,7 +466,7 @@ module Compute_Processor
         // Memory Write Stage
         Compute_Done <= Compute_Done_ALU;
         Data_Write_Control <= Data_Write_Control_ALU;
-        Data_Write <= ALU_output[15:0]; // we only want 16 bit of this, so we will just cut it out
+        Data_Write <= Data_Write_Mux_ALU ? CMP_2_to_1_output : ALU_output[15:0]; // Muxing for the correct output (mainly used for CONV1D 3rd layer for Global MaxPooling purposes)
         Data_Write_32_bit <= ALU_output; // This will be used to loop back to the adder
     end
 
@@ -527,6 +551,17 @@ module Compute_Processor
 
         // Output
         .Out_data(Comparator_output)
+    );
+
+    Comparator_2_into_1 Comparator_2_into_1(
+        // Data in
+        .Clk(Clk),
+        .Data_in_A(ALU_output[15:0]),
+        .reference_data(Data_Write),
+        .Latch_reset(Comparator_Ctrl),
+
+        // Data Out
+        .Data_out(CMP_2_to_1_output)
     );
 
 endmodule

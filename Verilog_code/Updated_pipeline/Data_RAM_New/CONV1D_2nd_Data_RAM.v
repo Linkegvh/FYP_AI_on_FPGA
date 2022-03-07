@@ -364,12 +364,12 @@ module CONV1D_2nd_Data_RAM
                         data_out_1 <= RAM_7_A[Read_Width];
                         data_out_2 <= (Read_Width >= 256 - 1) ? 0 : RAM_7_A[Read_Width + 1];
                     end                
-                // default:
-                //     begin
-                //         data_out_0 <= 0;
-                //         data_out_1 <= 0;
-                //         data_out_2 <= 0;
-                //     end
+                default:
+                    begin
+                        data_out_0 <= 0;
+                        data_out_1 <= 0;
+                        data_out_2 <= 0;
+                    end
             endcase
         end
     end

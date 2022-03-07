@@ -33,6 +33,15 @@ module CONV1D_1st_Data_RAM
     (* RAM_STYLE="BLOCK"*) reg [Bit_width - 1 : 0] RAM_3 [0 : RAM_Depth - 1];
     (* RAM_STYLE="BLOCK"*) reg [Bit_width - 1 : 0] RAM_4 [0 : RAM_Depth - 1];
 
+    // for testing purposes
+//    initial begin
+//        $readmemh("Initial_Data_1.mem", RAM_0);
+//        $readmemh("Initial_Data_1.mem", RAM_1);
+//        $readmemh("Initial_Data_1.mem", RAM_2);
+//        $readmemh("Initial_Data_1.mem", RAM_3);
+//        $readmemh("Initial_Data_1.mem", RAM_4);
+//    end
+
     always @ (negedge CLK) begin
         // Write
         if (Write_Enable) begin

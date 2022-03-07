@@ -217,8 +217,8 @@ module Data_RAM
 
     // Result register
     reg [Bit_width - 1 : 0] Result = 0;
-    always @ (posedge Clk) begin
-        Result <= FC_2nd_Write_Enable ? Data_in : 0;
+    always @ (negedge Clk) begin
+        Result <= FC_2nd_Write_Enable ? Data_in : Result;
     end
 
     // Pure Combinational Logic
@@ -258,14 +258,14 @@ module Data_RAM
                         Read_data_out_3 = 0;
                         Read_data_out_4 = 0;
                     end
-                Global_MaxPool:
-                    begin
-                        Read_data_out_0 = Data_out_Global_MaxPool_0;
-                        Read_data_out_1 = Data_out_Global_MaxPool_1;
-                        Read_data_out_2 = Data_out_Global_MaxPool_2;
-                        Read_data_out_3 = Data_out_Global_MaxPool_3;
-                        Read_data_out_4 = Data_out_Global_MaxPool_4;
-                    end
+                // Global_MaxPool:
+                //     begin
+                //         Read_data_out_0 = Data_out_Global_MaxPool_0;
+                //         Read_data_out_1 = Data_out_Global_MaxPool_1;
+                //         Read_data_out_2 = Data_out_Global_MaxPool_2;
+                //         Read_data_out_3 = Data_out_Global_MaxPool_3;
+                //         Read_data_out_4 = Data_out_Global_MaxPool_4;
+                //     end
                 FC_1st:
                     begin
                         Read_data_out_0 = Data_out_FC_1st_0;
@@ -383,34 +383,35 @@ module Data_RAM
         .data_out_2(Data_out_CONV_1D_3rd_2)
     );
 
-    Global_MaxPool_Data_RAM Global_MaxPool_Data_RAM( // E
-        .CLK(Clk),
+    // Global_MaxPool_Data_RAM Global_MaxPool_Data_RAM( // E
+    //     .CLK(Clk),
         
-        // Input (Write)
-        .Write_Enable(CONV1D_3rd_Write_Enable),
-        .Write_Depth(Write_Depth),
-        .Write_Width(Write_Width[7:0]),
-        .data_in(Data_in),
+    //     // Input (Write)
+    //     .Write_Enable(CONV1D_3rd_Write_Enable),
+    //     .Write_Depth(Write_Depth),
+    //     .Write_Width(Write_Width[7:0]),
+    //     .data_in(Data_in),
 
-        // Input (Read)
-        .Read_Enable(Global_MaxPool_Read_Enable),
-        .Read_Depth(Read_Depth),
-        .Read_Width(Read_Width[7:0]),
+    //     // Input (Read)
+    //     .Read_Enable(Global_MaxPool_Read_Enable),
+    //     .Read_Depth(Read_Depth),
+    //     .Read_Width(Read_Width[7:0]),
         
-        // Output
-        .data_out_0(Data_out_Global_MaxPool_0),
-        .data_out_1(Data_out_Global_MaxPool_1),
-        .data_out_2(Data_out_Global_MaxPool_2),
-        .data_out_3(Data_out_Global_MaxPool_3),
-        .data_out_4(Data_out_Global_MaxPool_4)
-    );
+    //     // Output
+    //     .data_out_0(Data_out_Global_MaxPool_0),
+    //     .data_out_1(Data_out_Global_MaxPool_1),
+    //     .data_out_2(Data_out_Global_MaxPool_2),
+    //     .data_out_3(Data_out_Global_MaxPool_3),
+    //     .data_out_4(Data_out_Global_MaxPool_4)
+    // );
 
     FC_1st_Data_RAM FC_1st_Data_RAM( // F
         .CLK(Clk),
         
         // Input (Write)
-        .Write_Enable(Global_MaxPool_Write_Enable),
-        .Write_Width(Write_Width[4:0]),
+        .Write_Enable(CONV1D_3rd_Write_Enable),
+        // .Write_Width(Write_Width[4:0]),
+        .Write_Width(Write_Depth),
         .data_in(Data_in),
 
         // Input (Read)

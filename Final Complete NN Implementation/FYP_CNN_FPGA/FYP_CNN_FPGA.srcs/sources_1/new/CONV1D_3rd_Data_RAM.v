@@ -29,18 +29,18 @@ module CONV1D_3rd_Data_RAM
     // Wire declaration
     // RAM 0
     wire RAM_0_Read_Enable;
-    assign RAM_0_Read_Enable = Read_Depth < 8;
+    assign RAM_0_Read_Enable = Read_Enable && Read_Depth < 8;
     wire RAM_0_Write_Enable;
-    assign RAM_0_Write_Enable = Write_Depth < 8;
+    assign RAM_0_Write_Enable = Write_Enable && Write_Depth < 8;
     wire [Bit_width - 1 : 0] data_out_RAM_0_0;
     wire [Bit_width - 1 : 0] data_out_RAM_0_1;
     wire [Bit_width - 1 : 0] data_out_RAM_0_2;
 
     // RAM 1
     wire RAM_1_Read_Enable;
-    assign RAM_1_Read_Enable = Read_Enable && Read_Depth > 8;
+    assign RAM_1_Read_Enable = Read_Enable && Read_Depth >= 8;
     wire RAM_1_Write_Enable;
-    assign RAM_1_Write_Enable = Write_Enable && Write_Depth > 8;
+    assign RAM_1_Write_Enable = Write_Enable && Write_Depth >= 8;
     wire [2:0] RAM_1_Write_Depth;
     assign RAM_1_Write_Depth = Write_Depth - 8;
     wire [2:0] RAM_1_Read_Depth;

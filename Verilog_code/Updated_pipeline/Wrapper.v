@@ -49,15 +49,15 @@ module Wrapper(
     localparam RX = 3'b001;
     localparam Compute = 3'b010;
     localparam TX = 3'b100;
-    reg [2:0] state_machine = 3'b001;
+    reg [2:0] state_machine = 3'b010;
 
-    reg [13:0] time_out_counter = 0;
-    localparam timeout = 12500;
+    reg [18:0] time_out_counter = 0;
+    localparam timeout = 250000;
     reg delay_by_1_cycle = 0;
 
     // Assignments
     // assign TX_data_out = Data_input_to_RAM;
-    assign Data_Write_uCode = (state_machine[0] && state_machine[2]) ? Data_Write_uCode_RX_TX : Data_Write_uCode_Compute;
+    assign Data_Write_uCode = (state_machine[0] || state_machine[2]) ? Data_Write_uCode_RX_TX : Data_Write_uCode_Compute;
     assign Data_input_to_RAM = (state_machine[0]) ? Data_input_to_RAM_RX : Data_input_to_RAM_Compute;
 
     /*********************** Wire Declaration End ******************/
@@ -70,14 +70,15 @@ module Wrapper(
                 begin
                     if (RX_Done) begin
                         // Data Write uCode related
-                        Data_Write_uCode_RX_TX[23:15] <= 0;
+                        Data_Write_uCode_RX_TX[23:15] <= (delay_by_1_cycle) ? Data_Write_uCode_RX_TX[23:15] + 1 : 0; // Increment by 1
                         delay_by_1_cycle <= 1;
-                        Data_Write_uCode_RX_TX[14:10] <= (delay_by_1_cycle) ? Data_Write_uCode_RX_TX[14:10] + 1 : 0; // Increment by 1
+                        Data_Write_uCode_RX_TX[14:10] <= 0;
                         Data_Write_uCode_RX_TX[9:1] <= 9'b1000_0000_0;
                         Data_Write_uCode_RX_TX[0] <= 1;
 
                         // Number of reads keep decreasing
-                        nr_of_reads <= nr_of_reads - 1;
+                        nr_of_reads <= (delay_by_1_cycle) ? nr_of_reads - 1 : nr_of_reads;
+                        time_out_counter <= 0;
                     end else if (nr_of_reads == 0) begin
                         state_machine <= Compute;
                         Data_Write_uCode_RX_TX <= 0;

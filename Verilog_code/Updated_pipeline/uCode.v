@@ -122,7 +122,7 @@ module uCode
             CONV1D_1st:
                 begin
                     // Pipeline uCode related
-                    pipeline_uCode[12] <= 1;
+                    pipeline_uCode[12] <= 0;
                     pipeline_uCode[11:10] <= 2'b11;
                     pipeline_uCode[9:4] <= 6'b111111;
                     pipeline_uCode[3] <= 0;

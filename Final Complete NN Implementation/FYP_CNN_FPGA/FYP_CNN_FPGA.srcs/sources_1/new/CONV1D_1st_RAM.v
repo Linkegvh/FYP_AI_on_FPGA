@@ -40,12 +40,12 @@ module CONV1D_1st_RAM
     );
 
     // RAM reg creation
-    (* RAM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_0 [0 : RAM_Depth - 1];
-    (* RAM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_1 [0 : RAM_Depth - 1];
-    (* RAM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_2 [0 : RAM_Depth - 1];
-    (* RAM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_3 [0 : RAM_Depth - 1];
-    (* RAM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_4 [0 : RAM_Depth - 1];
-    (* RAM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_5 [0 : RAM_Depth - 1];
+    (* ROM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_0 [0 : RAM_Depth - 1];
+    (* ROM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_1 [0 : RAM_Depth - 1];
+    (* ROM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_2 [0 : RAM_Depth - 1];
+    (* ROM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_3 [0 : RAM_Depth - 1];
+    (* ROM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_4 [0 : RAM_Depth - 1];
+    (* ROM_STYLE="BLOCK"*) reg signed [Bit_width - 1 : 0] RAM_5 [0 : RAM_Depth - 1];
 
     always @ (negedge CLK) begin
         if (Enable) begin

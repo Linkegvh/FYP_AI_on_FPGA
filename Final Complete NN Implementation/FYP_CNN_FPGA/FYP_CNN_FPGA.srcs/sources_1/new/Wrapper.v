@@ -11,10 +11,13 @@ module Wrapper(
     /************* Wire declaration ***************/
     // Data RAM related
     wire [23:0] Data_Read_uCode;    
+    reg [23:0] Data_Read_uCode_TX = 0;
+    wire [23:0] Data_Read_uCode_Compute;
+
     wire [23:0] Data_Write_uCode_Compute;
     reg [23:0] Data_Write_uCode_RX_TX;
     wire [23:0] Data_Write_uCode;
-    wire [3:0] Global_MaxPool_State_Machine;
+    // wire [3:0] Global_MaxPool_State_Machine;
     
     wire [Bit_width - 1 : 0] Data_input_to_RAM;
     wire [Bit_width - 1 : 0] Data_input_to_RAM_RX;
@@ -43,22 +46,25 @@ module Wrapper(
     // RX
     wire [15:0] RX_received_data;
     wire RX_Done;
+    wire TX_Done;
 
 
     // State machine declaration
     localparam RX = 3'b001;
     localparam Compute = 3'b010;
     localparam TX = 3'b100;
-    reg [2:0] state_machine = 3'b001;
+    reg [2:0] state_machine = RX;
 
-    reg [13:0] time_out_counter = 0;
-    localparam timeout = 12500;
+    reg [18:0] time_out_counter = 0;
+    localparam timeout = 250000;
     reg delay_by_1_cycle = 0;
 
     // Assignments
     // assign TX_data_out = Data_input_to_RAM;
-    assign Data_Write_uCode = (state_machine[0] && state_machine[2]) ? Data_Write_uCode_RX_TX : Data_Write_uCode_Compute;
+    assign Data_Write_uCode = (state_machine[0]) ? Data_Write_uCode_RX_TX : Data_Write_uCode_Compute;
     assign Data_input_to_RAM = (state_machine[0]) ? Data_input_to_RAM_RX : Data_input_to_RAM_Compute;
+
+    assign Data_Read_uCode = (state_machine[2]) ? Data_Read_uCode_TX : Data_Read_uCode_Compute;
 
     /*********************** Wire Declaration End ******************/
 
@@ -70,14 +76,15 @@ module Wrapper(
                 begin
                     if (RX_Done) begin
                         // Data Write uCode related
-                        Data_Write_uCode_RX_TX[23:15] <= 0;
+                        Data_Write_uCode_RX_TX[23:15] <= (delay_by_1_cycle) ? Data_Write_uCode_RX_TX[23:15] + 1 : 0; // Increment by 1
                         delay_by_1_cycle <= 1;
-                        Data_Write_uCode_RX_TX[14:10] <= (delay_by_1_cycle) ? Data_Write_uCode_RX_TX[14:10] + 1 : 0; // Increment by 1
+                        Data_Write_uCode_RX_TX[14:10] <= 0;
                         Data_Write_uCode_RX_TX[9:1] <= 9'b1000_0000_0;
                         Data_Write_uCode_RX_TX[0] <= 1;
 
                         // Number of reads keep decreasing
-                        nr_of_reads <= nr_of_reads - 1;
+                        nr_of_reads <= (delay_by_1_cycle) ? nr_of_reads - 1 : nr_of_reads;
+                        time_out_counter <= 0;
                     end else if (nr_of_reads == 0) begin
                         state_machine <= Compute;
                         Data_Write_uCode_RX_TX <= 0;
@@ -96,6 +103,7 @@ module Wrapper(
                     if (Compute_Done) begin
                         state_machine <= TX;
                         nr_of_writes <= Total_number_of_output_words;
+                        Compute_Enable <= 0;
                     end else begin
                         // Enable Compute
                         Compute_Enable <= 1;
@@ -104,17 +112,31 @@ module Wrapper(
 
             TX:
                 begin
-                    if (TX_IDLE && TX_Start == 0) begin
-                        // send out data
-                        TX_Start <= 1;
-                        nr_of_writes <= 0;
-                    end else if (nr_of_writes == 0) begin
+                    if (nr_of_writes == 0 && TX_Done) begin
                         state_machine <= RX;
                         TX_Start <= 0;
-                        // nr_of_reads <= Total_number_of_input_words;
+                        nr_of_reads <= Total_number_of_input_words - 1;
+                    end else if (TX_IDLE && TX_Start == 0) begin
+                        // Send out data
+                        TX_Start <= 1;
+                        nr_of_writes <= 0;
                     end else begin
+                        // nr_of_writes <= nr_of_writes - 1;
                         TX_Start <= 0;
                     end
+
+                    // if (TX_IDLE && TX_Start == 0) begin
+                    //     // send out data
+                    //     TX_Start <= 1;
+                    //     nr_of_writes <= 0;
+                    // end else if (nr_of_writes == 0 && TX_IDLE) begin
+                    //     state_machine <= RX;
+                    //     TX_Start <= 0;
+                    //     nr_of_reads <= Total_number_of_input_words - 1;
+                    // end else begin
+                    //     // nr_of_writes <= nr_of_writes - 1;
+                    //     TX_Start <= 0;
+                    // end
                 end
 
         endcase
@@ -135,7 +157,7 @@ module Wrapper(
         .Data_read_out_4(Data_read_out_4),
 
         // Output
-        .Data_Read_Control(Data_Read_uCode),
+        .Data_Read_Control(Data_Read_uCode_Compute),
         .Data_Write_Control(Data_Write_uCode_Compute),
         .Data_Write(Data_input_to_RAM_Compute),
         .Compute_Done(Compute_Done)
@@ -163,7 +185,8 @@ module Wrapper(
         .data_to_be_sent(Data_read_out_0),
         .i_Tx_start(TX_Start),
         .o_Tx_Serial(uart_rxd_out),
-        .TX_IDLE(TX_IDLE)
+        .TX_IDLE(TX_IDLE),
+        .TX_Done(TX_Done)
     );
 
     UART_RX_Flow_ctrl UART_RX_Controller (

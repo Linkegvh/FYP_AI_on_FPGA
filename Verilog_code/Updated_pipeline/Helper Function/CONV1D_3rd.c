@@ -27,9 +27,9 @@ int main(){
         for (int j = 0; j < 32; j++){
             for (int t = 0; t < 4; t ++){
                 if (input[i][j][t] < 0) {
-                    fprintf(out_file, "RAM_%d[%d] = -16'd%d;\n", t, i*4+j, abs(input[i][j][t]));
+                    fprintf(out_file, "RAM_%d[%d] = -16'd%d;\n", t, i*32+j, abs(input[i][j][t]));
                 }else{
-                    fprintf(out_file, "RAM_%d[%d] = 16'd%d;\n", t, i*4+j, input[i][j][t]);
+                    fprintf(out_file, "RAM_%d[%d] = 16'd%d;\n", t, i*32+j, input[i][j][t]);
                 }
             }
         }

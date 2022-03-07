@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_2" LaunchPart="xc7a35tcpg236-1" LaunchTime="1646186922" LaunchWriteIncrSynthDcp="true">
+<GenRun Id="synth_2" LaunchPart="xc7a35tcpg236-1" LaunchTime="1646574518">
   <File Type="PA-TCL" Name="Wrapper.tcl"/>
   <File Type="RDS-PROPCONSTRS" Name="Wrapper_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="Wrapper_reports.tcl"/>
@@ -67,6 +67,13 @@
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
+    <File Path="$PSRCDIR/sources_1/new/Comparator_2_into_1.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
     <File Path="$PSRCDIR/sources_1/new/Compute_processor.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -103,13 +110,6 @@
       </FileInfo>
     </File>
     <File Path="$PSRCDIR/sources_1/new/FC_2nd_RAM.v">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
-    <File Path="$PSRCDIR/sources_1/new/Global_MaxPool_Data_RAM.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
@@ -173,15 +173,6 @@
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
-    <File Path="$PSRCDIR/sources_1/imports/new/bin2bcd.v">
-      <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../../UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/bin2bcd.v"/>
-        <Attr Name="ImportTime" Val="1643542859"/>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
     <File Path="$PSRCDIR/sources_1/new/uCode.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -191,6 +182,24 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/Wrapper.v">
       <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/new/bin2bcd.v">
+      <FileInfo>
+        <Attr Name="UserDisabled" Val="1"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../UART_interface_integrated_1_layer_CNN/UART_interface_integrated_1_layer_CNN.srcs/sources_1/imports/new/bin2bcd.v"/>
+        <Attr Name="ImportTime" Val="1643542859"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/Global_MaxPool_Data_RAM.v">
+      <FileInfo>
+        <Attr Name="UserDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -225,8 +234,8 @@
   <Strategy Version="1" Minor="2">
     <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
     <Step Id="synth_design">
-      <Option Id="GatedClockConversion">2</Option>
       <Option Id="ReTiming">1</Option>
+      <Option Id="GatedClockConversion">2</Option>
     </Step>
   </Strategy>
 </GenRun>

@@ -17,6 +17,9 @@ proc create_report { reportName command } {
     send_msg_id runtcl-5 warning "$msg"
   }
 }
+set_param chipscope.maxJobs 2
+set_param xicom.use_bs_reader 1
+set_msg_config -id {Common 17-41} -limit 10000000
 create_project -in_memory -part xc7a35tcpg236-1
 
 set_param project.singleFileAddWarning.threshold 0
@@ -38,13 +41,13 @@ read_verilog -library xil_defaultlib {
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/CONV1D_3rd_Data_RAM.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/CONV1D_3rd_RAM.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/Comparator.v}
+  {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/Comparator_2_into_1.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/Compute_processor.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/Data_RAM.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/FC_1st_Data_RAM.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/FC_1st_RAM.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/FC_2nd_Data_RAM.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/FC_2nd_RAM.v}
-  {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/Global_MaxPool_Data_RAM.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/MaxPool_Data_RAM.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/Multiply.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/imports/new/UART_RX.v}
@@ -52,7 +55,6 @@ read_verilog -library xil_defaultlib {
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/imports/new/UART_TX.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/imports/new/UART_TX_Flow_ctrl.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/Weights_RAM.v}
-  {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/imports/new/bin2bcd.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/uCode.v}
   {C:/Users/Lingke/Desktop/FYP/FYP_AI_on_FPGA/Final Complete NN Implementation/FYP_CNN_FPGA/FYP_CNN_FPGA.srcs/sources_1/new/Wrapper.v}
 }
@@ -75,7 +77,7 @@ synth_design -top Wrapper -part xc7a35tcpg236-1 -gated_clock_conversion auto -re
 
 # disable binary constraint mode for synth run checkpoints
 set_param constraints.enableBinaryConstraints false
-write_checkpoint -force -noxdef -incremental_synth Wrapper.dcp
+write_checkpoint -force -noxdef Wrapper.dcp
 create_report "synth_2_synth_report_utilization_0" "report_utilization -file Wrapper_utilization_synth.rpt -pb Wrapper_utilization_synth.pb"
 file delete __synthesis_is_running__
 close [open __synthesis_is_complete__ w]

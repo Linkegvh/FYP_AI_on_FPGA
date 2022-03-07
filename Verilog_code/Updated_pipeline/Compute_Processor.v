@@ -129,7 +129,7 @@ module Compute_Processor
                             end else begin // else keep incrementing address
                                 Height <= (Height == CONV1D_2nd_height_num) ? 0 : Height + 1;
                                 Width <= (Height == CONV1D_2nd_height_num) ? (Width == CONV1D_2nd_width_num) ? 0 : Width + 1 : Width;
-                                Depth <= (Width == CONV1D_2nd_depth_num) ? Depth + 1 : Depth;
+                                Depth <= (Height == CONV1D_2nd_height_num && Width == CONV1D_2nd_width_num) ? Depth + 1 : Depth;
                             end
                         end else begin
                             // reset
@@ -142,13 +142,13 @@ module Compute_Processor
                     begin
                         if (delay_by_1_cycle) begin
                             if (Depth == CONV1D_3rd_depth_num && Width == CONV1D_3rd_width_num && Height == CONV1D_3rd_height_num) begin // State transtion trigger
-                                Compute_stage <= CONV1D_3rd;
+                                Compute_stage <= Global_MaxPool;
                                 Depth <= 0; Width <= 0; Height <= 0;
                                 delay_by_1_cycle <= 0;
                             end else begin // else keep incrementing address
                                 Height <= (Height == CONV1D_3rd_height_num) ? 0 : Height + 1;
                                 Width <= (Height == CONV1D_3rd_height_num) ? (Width == CONV1D_3rd_width_num) ? 0 : Width + 1 : Width;
-                                Depth <= (Width == CONV1D_3rd_depth_num) ? Depth + 1 : Depth;
+                                Depth <= (Height == CONV1D_3rd_height_num && Width == CONV1D_3rd_width_num) ? Depth + 1 : Depth;
                             end
                         end else begin
                             // reset
@@ -309,7 +309,7 @@ module Compute_Processor
     reg ALU_Mux_MUL;
     reg [5:0] Mul_Path_Enable;
     wire Final_Mul_Mux_Control; // the actual control signal for the Mux
-
+    wire [23:0] Data_Write_Control_MUL_Muxed;
 
     reg [Bit_width - 1 : 0] Mul_input_data_0;
     reg [Bit_width - 1 : 0] Mul_input_data_1;
@@ -342,10 +342,10 @@ module Compute_Processor
 
     // sign extend the read in data if needed
     assign Mul_Mux_data_out_0 = Final_Mul_Mux_Control ? { {16{Data_read_out_0[Bit_width-1]}}, Data_read_out_0} : Mul_output_mul_data_0;
-    assign Mul_Mux_data_out_1 = Final_Mul_Mux_Control ? { {16{Data_read_out_1[Bit_width-1]}}, Data_read_out_0} : Mul_output_mul_data_1;
-    assign Mul_Mux_data_out_2 = Final_Mul_Mux_Control ? { {16{Data_read_out_2[Bit_width-1]}}, Data_read_out_0} : Mul_output_mul_data_2;
-    assign Mul_Mux_data_out_3 = Final_Mul_Mux_Control ? { {16{Data_read_out_3[Bit_width-1]}}, Data_read_out_0} : Mul_output_mul_data_3;
-    assign Mul_Mux_data_out_4 = Final_Mul_Mux_Control ? { {16{Data_read_out_4[Bit_width-1]}}, Data_read_out_0} : Mul_output_mul_data_4;
+    assign Mul_Mux_data_out_1 = Final_Mul_Mux_Control ? { {16{Data_read_out_1[Bit_width-1]}}, Data_read_out_1} : Mul_output_mul_data_1;
+    assign Mul_Mux_data_out_2 = Final_Mul_Mux_Control ? { {16{Data_read_out_2[Bit_width-1]}}, Data_read_out_2} : Mul_output_mul_data_2;
+    assign Mul_Mux_data_out_3 = Final_Mul_Mux_Control ? { {16{Data_read_out_3[Bit_width-1]}}, Data_read_out_3} : Mul_output_mul_data_3;
+    assign Mul_Mux_data_out_4 = Final_Mul_Mux_Control ? { {16{Data_read_out_4[Bit_width-1]}}, Data_read_out_4} : Mul_output_mul_data_4;
     assign Mul_Mux_data_out_5 = Final_Mul_Mux_Control ? 0 : Mul_output_mul_data_5;
 
     // ALU Stage
@@ -373,6 +373,7 @@ module Compute_Processor
 
     // Other assignments
     assign Additional_input = (Adder_Input_Mux) ? Data_Write_32_bit : 0;
+    assign Data_Write_Control_MUL_Muxed = (MUL_Mux_Sel) ? Data_Write_Control_Reg : Data_Write_Control_MUL;
 
     /**************** Actual pipelining *******************/
     always @ (posedge Clk) begin
@@ -380,7 +381,7 @@ module Compute_Processor
         // Decode Stage related
         if (Enable) begin
             Adder_Input_Reg <= uCode[12];
-            Adder_Ctrl_Reg <= uCode[11:0];
+            Adder_Ctrl_Reg <= uCode[11:10];
             Mul_Path_Enable_Reg <= uCode[9:4];
             Mul_Mux_Control_reg <= uCode[3];
             Mul_Mux_Sel_Reg <= uCode[2];
@@ -430,7 +431,7 @@ module Compute_Processor
         ALU_Mux_Ctrl <= ALU_Mux_MUL;
         Compute_Done_ALU <= Compute_Done_MUL;
         
-        Data_Write_Control_ALU <= Data_Write_Control_MUL;
+        Data_Write_Control_ALU <= Data_Write_Control_MUL_Muxed;
 
         Mul_output_mul_data_ALU_0 <= Mul_Mux_data_out_0;
         Mul_output_mul_data_ALU_1 <= Mul_Mux_data_out_1;
